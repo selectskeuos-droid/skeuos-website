@@ -2093,17 +2093,17 @@
       <button class="close-btn" id="btnCloseAuth" style="color:white;">&times;</button>
     </div>
     <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="padding:24px; display:flex; flex-direction:column; gap:16px;">
-      <p style="font-size:13px; color:#666; line-height:1.5;">請輸入商家管理員帳號與密碼以進入庫存與商品管理後台。<br>（預設帳號：<code style="background:#eee; padding:2px 6px; border-radius:4px; font-weight:700;">admin</code> / 密碼：<code style="background:#eee; padding:2px 6px; border-radius:4px; font-weight:700;">skeuos2026</code>）</p>
+      <p style="font-size:13px; color:#666; line-height:1.5;">請輸入商家管理員帳號與密碼以進入庫存與商品管理後台。</p>
       
       <div class="form-group">
         <label class="form-label">管理員帳號 (Username)</label>
-        <input type="text" id="authUsername" class="form-input" placeholder="admin" value="admin" required>
+        <input type="text" id="authUsername" class="form-input" placeholder="請輸入管理員帳號..." value="" required autocomplete="off">
       </div>
 
       <div class="form-group">
         <label class="form-label">管理員密碼 (Password)</label>
         <div style="position:relative;">
-          <input type="password" id="authPassword" class="form-input" style="width:100%; padding-right:40px;" placeholder="請輸入密碼..." value="skeuos2026" required>
+          <input type="password" id="authPassword" class="form-input" style="width:100%; padding-right:40px;" placeholder="請輸入管理員密碼..." value="" required autocomplete="new-password">
           <button type="button" onclick="togglePassVisibility()" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:14px; opacity:0.6;">👁️</button>
         </div>
       </div>
@@ -2705,6 +2705,10 @@
     let isAdminAuthed = sessionStorage.getItem('skeuos_admin_authed') === 'true' || localStorage.getItem('skeuos_admin_authed') === 'true';
 
     function openAdminAuth() {
+      const uEl = document.getElementById('authUsername');
+      const pEl = document.getElementById('authPassword');
+      if (uEl) uEl.value = '';
+      if (pEl) pEl.value = '';
       backdrop.classList.add('active');
       document.getElementById('adminAuthModal').classList.add('active');
       document.getElementById('authErrMsg').style.display = 'none';
