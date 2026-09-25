@@ -1,0 +1,3523 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SKEUOS | 質感選物店 Curated Select Shop</title>
+  <!-- Google Fonts for sleek typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       RESET & BASE STYLES
+       ========================================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --font-family: 'Plus Jakarta Sans', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+      --color-primary: #111111;
+      --color-muted: #767676;
+      --color-light-muted: #9e9e9e;
+      --color-bg-light: #f5f5f5;
+      --color-card-bg: #f6f6f6;
+      --color-border: #e5e5e5;
+      --color-white: #ffffff;
+      --color-black: #000000;
+      --color-sale-badge: #000000;
+      --transition-base: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      --container-max-width: 1320px;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--color-white);
+      color: var(--color-primary);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .container {
+      max-width: var(--container-max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ==========================================================================
+       HEADER & NAVIGATION OVERLAY
+       ========================================================================== */
+    .header-wrapper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 100;
+      transition: var(--transition-base);
+    }
+
+    .header-wrapper.scrolled {
+      position: fixed;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .navbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 76px;
+      padding: 0 32px;
+      color: var(--color-white);
+      transition: var(--transition-base);
+    }
+
+    .header-wrapper.scrolled .navbar {
+      color: var(--color-primary);
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-img {
+      height: 42px;
+      width: auto;
+      display: block;
+      transition: var(--transition-base);
+    }
+
+    /* When scrolled over white background, make logo crisp dark */
+    .header-wrapper.scrolled .logo-img {
+      filter: brightness(0);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-item {
+      font-size: 14px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      opacity: 0.9;
+      transition: var(--transition-base);
+    }
+
+    .nav-item:hover {
+      opacity: 1;
+    }
+
+    .nav-item svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    /* Language Switcher Button */
+    .lang-switcher-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: inherit;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(4px);
+      transition: var(--transition-base);
+      cursor: pointer;
+    }
+
+    .header-wrapper.scrolled .lang-switcher-btn {
+      border-color: rgba(0, 0, 0, 0.15);
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .lang-switcher-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .header-wrapper.scrolled .lang-switcher-btn:hover {
+      background: rgba(0, 0, 0, 0.08);
+    }
+
+    .lang-switcher-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+    }
+
+    /* Admin Entrance Button */
+    .btn-admin-panel {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.65);
+      color: var(--color-white);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      transition: var(--transition-base);
+    }
+
+    .btn-admin-panel:hover {
+      background: var(--color-black);
+      transform: translateY(-1px);
+    }
+
+    .header-wrapper.scrolled .btn-admin-panel {
+      background: var(--color-primary);
+      color: var(--color-white);
+      border: none;
+    }
+
+    .icon-btn {
+      color: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      position: relative;
+      transition: var(--transition-base);
+    }
+
+    .icon-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .header-wrapper.scrolled .icon-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .icon-btn svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background: var(--color-white);
+      color: var(--color-primary);
+      font-size: 10px;
+      font-weight: 700;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .header-wrapper.scrolled .cart-badge {
+      background: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    /* ==========================================================================
+       HERO SECTION (PICNIC RUG COVER)
+       ========================================================================== */
+    .hero-section {
+      position: relative;
+      width: 100%;
+      height: 92vh;
+      min-height: 560px;
+      max-height: 820px;
+      background-image: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.15) 40%, rgba(0, 0, 0, 0.45) 100%), url('assets/hero-bg.jpg');
+      background-size: cover;
+      background-position: center center;
+      display: flex;
+      align-items: flex-end;
+      padding-bottom: 90px;
+      color: var(--color-white);
+    }
+
+    .hero-content {
+      padding-left: 60px;
+      max-width: 650px;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      opacity: 0.95;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-size: clamp(38px, 5.5vw, 64px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.8px;
+      margin-bottom: 28px;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
+    .btn-hero {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--color-white);
+      color: var(--color-primary);
+      padding: 12px 28px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      transition: var(--transition-base);
+    }
+
+    .btn-hero:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+      background-color: #f8f8f8;
+    }
+
+    /* ==========================================================================
+       CATEGORY TABS & PRODUCT SECTION
+       ========================================================================== */
+    .products-section {
+      padding: 56px 0 90px 0;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .header-left-title {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--color-primary);
+      letter-spacing: -0.4px;
+    }
+
+    .section-divider {
+      color: #d1d1d1;
+      font-weight: 300;
+      font-size: 18px;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-muted);
+    }
+
+    /* Filter Buttons */
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-muted);
+      background-color: #f4f4f4;
+      transition: var(--transition-base);
+    }
+
+    .filter-btn:hover {
+      background-color: #e8e8e8;
+      color: var(--color-primary);
+    }
+
+    .filter-btn.active {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    /* Product Grid */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px 20px;
+    }
+
+    /* Product Card */
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .product-image-box {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1 / 1.06;
+      background-color: var(--color-card-bg);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.05);
+    }
+
+    /* Badges */
+    .badge-discount {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background-color: var(--color-sale-badge);
+      color: var(--color-white);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 999px;
+      line-height: 1;
+      z-index: 2;
+    }
+
+    .badge-tag-left {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background-color: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(4px);
+      color: var(--color-primary);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      line-height: 1;
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    /* Card Hover Action Bar */
+    .card-action-bar {
+      position: absolute;
+      bottom: 12px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      gap: 6px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: var(--transition-base);
+      z-index: 3;
+    }
+
+    .product-card:hover .card-action-bar {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .btn-card-action {
+      flex: 1;
+      background-color: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      color: var(--color-primary);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      padding: 8px 6px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: var(--transition-base);
+      white-space: nowrap;
+    }
+
+    .btn-card-action:hover {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+    }
+
+    /* Card Info */
+    .product-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .product-price-line {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 2px;
+    }
+
+    .price-current {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .price-original {
+      font-size: 13px;
+      color: var(--color-light-muted);
+      text-decoration: line-through;
+    }
+
+    .product-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-primary);
+      line-height: 1.35;
+    }
+
+    /* Rating stars */
+    .product-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin: 3px 0 8px 0;
+    }
+
+    .stars {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .star-icon {
+      width: 11px;
+      height: 11px;
+      fill: #111111;
+    }
+
+    .review-count {
+      font-size: 12px;
+      color: var(--color-muted);
+      margin-left: 2px;
+    }
+
+    /* Tag Pills */
+    .product-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background-color: #f1f1f1;
+      color: #555555;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      transition: var(--transition-base);
+    }
+
+    .tag-pill:hover {
+      background-color: #e5e5e5;
+      color: #111111;
+    }
+
+    /* ==========================================================================
+       EDITORIAL LOOKBOOK SHOWCASE SECTION
+       ========================================================================== */
+    .lookbook-section {
+      padding: 70px 0;
+      background-color: #fafafa;
+      border-top: 1px solid var(--color-border);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .lookbook-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .lookbook-card {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      height: 380px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+      cursor: pointer;
+    }
+
+    .lookbook-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .lookbook-card:hover img {
+      transform: scale(1.06);
+    }
+
+    .lookbook-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 24px;
+      background: linear-gradient(0deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 100%);
+      color: var(--color-white);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .lb-tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.85;
+    }
+
+    .lb-title {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    /* ==========================================================================
+       ADMIN INVENTORY SYSTEM MODAL & IMAGE ZOOM PREVIEW
+       ========================================================================== */
+    .admin-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -45%) scale(0.95);
+      width: 920px;
+      max-width: 94vw;
+      max-height: 90vh;
+      background: var(--color-white);
+      border-radius: 14px;
+      z-index: 250;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .admin-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .admin-header {
+      padding: 20px 28px;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #fafafa;
+    }
+
+    .admin-title-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .admin-body {
+      padding: 28px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Admin Form */
+    .admin-section-box {
+      background: #fbfbfb;
+      border: 1px solid var(--color-border);
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .admin-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 14px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: span 2;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #444;
+    }
+
+    .form-input, .form-select {
+      padding: 10px 14px;
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      background: var(--color-white);
+      transition: var(--transition-base);
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--color-primary);
+    }
+
+    .btn-submit-item {
+      grid-column: span 2;
+      background: var(--color-primary);
+      color: var(--color-white);
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+
+    .btn-submit-item:hover {
+      opacity: 0.9;
+    }
+
+    /* Inventory Table & Zoomable Thumbnails */
+    .inventory-table-wrapper {
+      overflow-x: auto;
+    }
+
+    .inventory-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    .inventory-table th {
+      padding: 12px 14px;
+      background: #f0f0f0;
+      font-weight: 700;
+      border-bottom: 2px solid var(--color-border);
+    }
+
+    .inventory-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid #eee;
+      vertical-align: middle;
+    }
+
+    .table-thumb {
+      width: 52px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 6px;
+      background: #eee;
+      cursor: zoom-in;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: 1px solid #ddd;
+    }
+
+    .table-thumb:hover {
+      transform: scale(1.15);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-mini-del {
+      background: #ff4d4f;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .btn-mini-del:hover {
+      background: #d9363e;
+    }
+
+    .admin-footer-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 28px;
+      background: #fafafa;
+      border-top: 1px solid var(--color-border);
+    }
+
+    .btn-backup {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--color-border);
+      background: white;
+      cursor: pointer;
+    }
+
+    .btn-backup:hover {
+      background: #f0f0f0;
+    }
+
+    /* Admin Image Zoom Preview Modal */
+    .img-zoom-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      max-width: 80vw;
+      max-height: 85vh;
+      background: var(--color-white);
+      border-radius: 12px;
+      z-index: 320;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .img-zoom-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .img-zoom-preview {
+      max-width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 8px;
+      background: #f4f4f4;
+    }
+
+    /* Admin Security Auth Login Modal */
+    .admin-auth-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -45%) scale(0.95);
+      width: 440px;
+      max-width: 92vw;
+      background: var(--color-white);
+      border-radius: 14px;
+      z-index: 260;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+      overflow: hidden;
+    }
+
+    .admin-auth-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    /* Image Cropper Modal */
+    .cropper-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -45%) scale(0.95);
+      width: 460px;
+      max-width: 94vw;
+      background: var(--color-white);
+      border-radius: 14px;
+      z-index: 340;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+      overflow: hidden;
+    }
+
+    .cropper-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .crop-canvas-wrapper {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      background: #1e1e1e;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset 0 0 12px rgba(0,0,0,0.6);
+      cursor: grab;
+      user-select: none;
+    }
+
+    .crop-canvas-wrapper:active {
+      cursor: grabbing;
+    }
+
+    /* Multi-Image Gallery Cards in Admin Form */
+    .admin-multi-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .admin-thumb-card {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid #e2e8f0;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .admin-thumb-card.is-cover {
+      border-color: #22c55e;
+      box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+    }
+
+    .admin-thumb-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumb-cover-badge {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      background: #22c55e;
+      color: white;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 999px;
+    }
+
+    .thumb-actions-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .admin-thumb-card:hover .thumb-actions-overlay,
+    .admin-thumb-card:focus-within .thumb-actions-overlay {
+      opacity: 1;
+    }
+
+    .btn-thumb-mini {
+      background: white;
+      color: #111;
+      border: none;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-thumb-mini:hover {
+      background: #f1f5f9;
+    }
+
+    /* Color Variant Selector Pills for Quick View */
+    .variant-selector-box {
+      margin-bottom: 20px;
+    }
+
+    .variant-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #555;
+      margin-bottom: 8px;
+    }
+
+    .variant-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .variant-pill {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--color-border);
+      background: #f8f8f8;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+
+    .variant-pill.active {
+      background: var(--color-primary);
+      color: var(--color-white);
+      border-color: var(--color-primary);
+    }
+
+    /* Gallery Thumbnails inside Quick View */
+    .qv-gallery-thumbs {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .qv-thumb {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      opacity: 0.7;
+      transition: var(--transition-base);
+    }
+
+    .qv-thumb.active, .qv-thumb:hover {
+      opacity: 1;
+      border-color: var(--color-primary);
+    }
+
+    /* ==========================================================================
+       CART DRAWER & MODAL OVERLAYS
+       ========================================================================== */
+    .overlay-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .overlay-backdrop.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Cart Drawer */
+    .cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 420px;
+      max-width: 90vw;
+      height: 100%;
+      background-color: var(--color-white);
+      z-index: 210;
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+    }
+
+    .cart-drawer.active {
+      transform: translateX(0);
+    }
+
+    .cart-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .close-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--color-muted);
+      transition: var(--transition-base);
+    }
+
+    .close-btn:hover {
+      background-color: var(--color-bg-light);
+      color: var(--color-primary);
+    }
+
+    .cart-body {
+      flex: 1;
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .cart-empty {
+      text-align: center;
+      color: var(--color-muted);
+      margin: auto 0;
+      font-size: 14px;
+    }
+
+    .cart-item {
+      display: flex;
+      gap: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .cart-item-img {
+      width: 72px;
+      height: 72px;
+      object-fit: cover;
+      background: var(--color-card-bg);
+      border-radius: 6px;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .cart-item-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+    }
+
+    .qty-controls {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--color-border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .qty-btn:hover {
+      background: #eee;
+    }
+
+    .qty-val {
+      width: 32px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .cart-footer {
+      padding: 24px;
+      border-top: 1px solid var(--color-border);
+      background-color: #fafafa;
+    }
+
+    .cart-summary-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .btn-checkout {
+      width: 100%;
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      transition: var(--transition-base);
+    }
+
+    .btn-checkout:hover {
+      opacity: 0.9;
+    }
+
+    /* Quick View Modal */
+    .quickview-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -45%) scale(0.95);
+      width: 780px;
+      max-width: 92vw;
+      background: var(--color-white);
+      border-radius: 12px;
+      z-index: 220;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .quickview-modal.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    .quickview-content {
+      display: grid;
+      grid-template-columns: 1.1fr 1fr;
+    }
+
+    .qv-left-gallery {
+      padding: 24px;
+      background: var(--color-card-bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qv-img-container {
+      position: relative;
+      width: 100%;
+      cursor: zoom-in;
+      border-radius: 8px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f0f0f0;
+    }
+
+    .qv-img-zoom-tag {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(17, 17, 17, 0.75);
+      color: #ffffff;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      pointer-events: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .qv-img-container:hover .qv-img-zoom-tag {
+      background: var(--color-black);
+      transform: scale(1.04);
+    }
+
+    .quickview-img {
+      width: 100%;
+      height: 320px;
+      object-fit: contain;
+      border-radius: 6px;
+      transition: transform 0.3s ease;
+    }
+
+    .qv-img-container:hover .quickview-img {
+      transform: scale(1.03);
+    }
+
+    .quickview-details {
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .qv-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+
+    /* Search Modal */
+    .search-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 30px 24px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(16px);
+      z-index: 230;
+      transform: translateY(-100%);
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .search-modal.active {
+      transform: translateY(0);
+    }
+
+    .search-container {
+      max-width: 700px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 14px 20px;
+      font-size: 16px;
+      font-family: inherit;
+      border: 1px solid var(--color-border);
+      border-radius: 999px;
+      outline: none;
+      transition: var(--transition-base);
+    }
+
+    /* Jewelry Subcategory Filter Bar */
+    .jewelry-sub-tabs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      padding: 10px 16px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 999px;
+      width: 100%;
+      animation: fadeInSubTabs 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInSubTabs {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .sub-filter-btn {
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      background-color: #ffffff;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      transition: var(--transition-base);
+    }
+
+    .sub-filter-btn:hover {
+      background-color: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .sub-filter-btn.active {
+      background-color: #0f172a;
+      color: #ffffff;
+      border-color: #0f172a;
+    }
+
+    /* Toast Notification */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: var(--color-primary);
+      color: var(--color-white);
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all 0.3s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--color-border);
+      padding: 40px 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--color-muted);
+      background-color: #fafafa;
+    }
+
+    /* Mobile Photo Upload Preview Box */
+    .admin-img-preview-box {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-top: 10px;
+      padding: 10px;
+      background: #f0fdf4;
+      border: 1px dashed #22c55e;
+      border-radius: 8px;
+    }
+
+    .admin-img-preview-box.active {
+      display: flex;
+    }
+
+    .admin-img-preview-thumb {
+      width: 64px;
+      height: 64px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #bbf7d0;
+    }
+
+    /* Responsive Breakdown */
+    @media (max-width: 1024px) {
+      .product-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px 16px;
+      }
+
+      .lookbook-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-content {
+        padding-left: 32px;
+      }
+
+      .hero-title {
+        font-size: 44px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px 12px;
+      }
+
+      .admin-modal {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        top: 0;
+        left: 0;
+        transform: none !important;
+        border-radius: 0;
+      }
+
+      .admin-modal.active {
+        transform: none !important;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-links {
+        display: none;
+      }
+
+      .navbar {
+        padding: 0 12px;
+        height: 64px;
+      }
+
+      .logo-img {
+        height: 34px;
+      }
+
+      .nav-right {
+        gap: 6px;
+      }
+
+      .btn-admin-panel, .lang-switcher-btn {
+        padding: 5px 9px;
+        font-size: 11px;
+      }
+
+      .icon-btn {
+        width: 34px;
+        height: 34px;
+      }
+
+      .icon-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .hero-section {
+        height: 75vh;
+        min-height: 440px;
+        padding-bottom: 50px;
+      }
+
+      .hero-content {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .hero-title {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px 10px;
+      }
+
+      .product-card .btn-quick-add {
+        opacity: 1;
+        transform: translateY(0);
+        padding: 8px 6px;
+        font-size: 11px;
+      }
+
+      .product-title {
+        font-size: 13px;
+      }
+
+      .price-current {
+        font-size: 13px;
+      }
+
+      /* Admin Modal Mobile Optimization */
+      .admin-modal {
+        width: 100vw;
+        height: 100vh;
+        max-width: 100vw;
+        max-height: 100vh;
+        top: 0;
+        left: 0;
+        transform: none !important;
+        border-radius: 0;
+      }
+
+      .admin-header {
+        padding: 14px 16px;
+      }
+
+      .admin-title {
+        font-size: 15px;
+      }
+
+      .admin-body {
+        padding: 16px;
+        gap: 20px;
+      }
+
+      .admin-section-box {
+        padding: 14px;
+      }
+
+      .admin-form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .form-group.full-width {
+        grid-column: span 1;
+      }
+
+      .form-input, .form-select {
+        font-size: 16px; /* Prevents auto-zoom on iOS Safari */
+        padding: 11px 12px;
+      }
+
+      .btn-submit-item {
+        grid-column: span 1;
+        padding: 14px;
+        font-size: 14px;
+      }
+
+      .admin-footer-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 14px 16px;
+      }
+
+      .admin-footer-toolbar > div {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn-backup {
+        width: 100%;
+        justify-content: center;
+        padding: 10px;
+      }
+
+      .inventory-table th, .inventory-table td {
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+
+      .table-thumb {
+        width: 44px;
+        height: 44px;
+      }
+
+      /* Quick View Modal Mobile */
+      .quickview-modal {
+        width: 96vw;
+        max-width: 96vw;
+        max-height: 88vh;
+        overflow-y: auto;
+      }
+
+      .quickview-content {
+        grid-template-columns: 1fr;
+      }
+
+      .quickview-details {
+        padding: 20px 16px;
+      }
+
+      .quickview-img {
+        height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================================================
+       HEADER OVERLAY NAVIGATION
+       ========================================================================== -->
+  <div class="header-wrapper" id="headerWrapper">
+    <nav class="navbar">
+      <div class="nav-left">
+        <!-- Transparent White Handwritten SKEUOS Logo -->
+        <a href="#" class="logo-container" title="SKEUOS">
+          <img src="assets/logo-white.png" alt="SKEUOS" class="logo-img">
+        </a>
+        <ul class="nav-links">
+          <li>
+            <a href="#" class="nav-item">
+              <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="#sets-bundles" class="nav-item">
+              <span data-i18n="nav_shop">選物商店</span>
+              <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+            </a>
+          </li>
+          <li>
+            <a href="#sets-bundles" class="nav-item">
+              <span data-i18n="nav_bestsellers">熱銷推薦</span>
+              <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+            </a>
+          </li>
+          <li><a href="#lookbook" class="nav-item" data-i18n="nav_lookbook">品牌故事誌</a></li>
+        </ul>
+      </div>
+
+      <div class="nav-right">
+        <!-- Merchant Admin Entrance Button -->
+        <button class="btn-admin-panel" id="btnOpenAdmin" title="商家庫存與商品管理系統">
+          ⚙️ <span data-i18n="admin_btn">庫存管理</span>
+        </button>
+
+        <!-- Top Right Language Switcher Button -->
+        <button class="lang-switcher-btn" id="btnToggleLang" title="Switch Language / 切換語言">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          <span id="langBtnText">EN / 繁中</span>
+        </button>
+
+        <!-- Category Grid Icon -->
+        <button class="icon-btn" title="分類網格" onclick="showToast(currentLang === 'zh' ? '瀏覽 SKEUOS 全站商品分類' : 'Browsing SKEUOS categories grid')">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+          </svg>
+        </button>
+
+        <!-- Search Icon -->
+        <button class="icon-btn" title="搜尋" id="btnOpenSearch">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+
+        <!-- User Profile Icon -->
+        <button class="icon-btn" title="會員帳號" onclick="showToast(currentLang === 'zh' ? '開啟 SKEUOS 會員中心' : 'SKEUOS user account modal')">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </button>
+
+        <!-- Cart Icon -->
+        <button class="icon-btn" title="購物車" id="btnOpenCart">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <path d="M16 10a4 4 0 0 1-8 0"/>
+          </svg>
+          <span class="cart-badge" id="cartBadgeCount">0</span>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- ==========================================================================
+       HERO BANNER (WITH PICNIC RUG COVER)
+       ========================================================================== -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <p class="hero-subtitle" data-i18n="hero_subtitle">SKEUOS 戶外與生活選物</p>
+      <h1 class="hero-title" data-i18n="hero_title">野餐風格與生活選物系列</h1>
+      <a href="#sets-bundles" class="btn-hero" data-i18n="hero_btn">瀏覽更多</a>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       SETS & BUNDLES PRODUCT SECTION (WITH DYNAMIC CATEGORY FILTERING)
+       ========================================================================== -->
+  <section class="products-section" id="sets-bundles">
+    <div class="container">
+      
+      <!-- Section Header -->
+      <div class="section-header">
+        <div class="header-left-title">
+          <h2 class="section-title" data-i18n="section_title">精選輯</h2>
+          <span class="section-divider">|</span>
+          <span class="section-subtitle" data-i18n="section_subtitle">最高享 50% 折扣</span>
+        </div>
+
+        <!-- Filter Category Tabs -->
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-btn active" data-cat="all" data-i18n="tab_all">全部商品</button>
+          <button class="filter-btn" data-cat="stationery" data-i18n="tab_stationery">文具手帳</button>
+          <button class="filter-btn" data-cat="bundles" data-i18n="tab_bundles">精選組合</button>
+          <button class="filter-btn" data-cat="textiles" data-i18n="tab_textiles">織品家飾</button>
+          <button class="filter-btn" data-cat="ceramics" data-i18n="tab_ceramics">陶瓷餐具</button>
+          <button class="filter-btn" data-cat="jewelry" data-i18n="tab_jewelry">飾品工藝</button>
+        </div>
+
+        <!-- Dynamic Jewelry Material Subcategory Pills -->
+        <div class="jewelry-sub-tabs" id="jewelrySubTabs" style="display:none;">
+          <span style="font-size:12px; font-weight:700; color:#475569; margin-right:4px;">💎 飾品材質 (Jewelry Material):</span>
+          <button class="sub-filter-btn active" data-subcat="all" data-i18n="subcat_all">全部飾品</button>
+          <button class="sub-filter-btn" data-subcat="silver925" data-i18n="subcat_silver925">✨ 925純銀</button>
+          <button class="sub-filter-btn" data-subcat="silver_plated" data-i18n="subcat_silver_plated">💎 合金鍍銀</button>
+          <button class="sub-filter-btn" data-subcat="alloy" data-i18n="subcat_alloy">⚡ 合金</button>
+          <button class="sub-filter-btn" data-subcat="titanium" data-i18n="subcat_titanium">🛡️ 鈦鋼</button>
+        </div>
+      </div>
+
+      <!-- Dynamic Product Grid -->
+      <div class="product-grid" id="productGrid"></div>
+    </div>
+  </section>
+
+  <!-- ==========================================================================
+       EDITORIAL LOOKBOOK SHOWCASE
+       ========================================================================== -->
+  <section class="lookbook-section" id="lookbook">
+    <div class="container">
+      <div style="margin-bottom: 30px;">
+        <span style="font-size:12px; font-weight:700; letter-spacing:1px; color:var(--color-muted); text-transform:uppercase;" data-i18n="lb_tagline">SKEUOS 故事誌</span>
+        <h2 style="font-size:26px; font-weight:700; letter-spacing:-0.4px;" data-i18n="lb_main_title">工藝與生活風格特輯</h2>
+      </div>
+
+      <div class="lookbook-grid">
+        <!-- Lookbook 1: Outdoor Picnic Rug -->
+        <div class="lookbook-card" onclick="openQuickView(11)">
+          <img src="assets/new-product-3.jpg" alt="防水防潮紙質野餐墊">
+          <div class="lookbook-overlay">
+            <span class="lb-tag" data-i18n="lb1_tag">封面主打</span>
+            <h3 class="lb-title" data-i18n="lb1_title">陽光野餐與戶外生活</h3>
+          </div>
+        </div>
+
+        <!-- Lookbook 2: 2027 Planner Notebooks -->
+        <div class="lookbook-card" onclick="openQuickView(14)">
+          <img src="assets/planner-card-1.jpg" alt="THE PLANNER 2027 手帳本">
+          <div class="lookbook-overlay">
+            <span class="lb-tag" data-i18n="lb2_tag">文具手帳</span>
+            <h3 class="lb-title" data-i18n="lb2_title">THE PLANNER 2027 色彩生活頁面</h3>
+          </div>
+        </div>
+
+        <!-- Lookbook 3: Silver Jewelry -->
+        <div class="lookbook-card" onclick="openQuickView(13)">
+          <img src="assets/new-product-5.png" alt="工藝師手作純銀戒指系列">
+          <div class="lookbook-overlay">
+            <span class="lb-tag" data-i18n="lb3_tag">職人首飾</span>
+            <h3 class="lb-title" data-i18n="lb3_title">純銀與金屬雕塑首飾</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p data-i18n="footer_text">&copy; 2026 SKEUOS 選物店。極簡美學與精緻生活。</p>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       MODALS & OVERLAYS
+       ========================================================================== -->
+
+  <!-- Overlay Backdrop -->
+  <div class="overlay-backdrop" id="backdrop"></div>
+
+  <!-- Cart Drawer -->
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+      <h3 class="cart-title" data-i18n="cart_title">您的購物車</h3>
+      <button class="close-btn" id="btnCloseCart">&times;</button>
+    </div>
+    <div class="cart-body" id="cartBody">
+      <div class="cart-empty" data-i18n="cart_empty">您的購物車目前是空的。</div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-summary-line">
+        <span data-i18n="cart_subtotal">小計</span>
+        <span id="cartSubtotal">$0.00</span>
+      </div>
+      <button class="btn-checkout" onclick="showToast(currentLang === 'zh' ? '準備前往安全結帳頁面...' : 'Proceeding to Checkout...')" data-i18n="cart_checkout">前往結帳</button>
+    </div>
+  </div>
+
+  <!-- Quick View Modal (Enhanced with Interactive Image Zoom & Product Description) -->
+  <div class="quickview-modal" id="quickViewModal">
+    <button class="close-btn qv-close" id="btnCloseQV">&times;</button>
+    <div class="quickview-content">
+      <div class="qv-left-gallery">
+        <div class="qv-img-container" id="qvImgContainer" title="點擊放大觀看高解析大圖">
+          <img id="qvImg" src="" alt="" class="quickview-img">
+          <span class="qv-img-zoom-tag" data-i18n="click_to_zoom">
+            🔍 點擊放大全螢幕圖片
+          </span>
+        </div>
+        <div class="qv-gallery-thumbs" id="qvThumbsContainer"></div>
+      </div>
+      <div class="quickview-details" style="max-height:80vh; overflow-y:auto;">
+        <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:8px;">
+          <span id="qvCatTag" style="font-size:11px; font-weight:700; background:#f1f5f9; color:#475569; padding:4px 10px; border-radius:999px;">
+            SKEUOS 精選
+          </span>
+          <span id="qvStockTag" style="font-size:11px; font-weight:600; color:#16a34a; background:#f0fdf4; padding:4px 10px; border-radius:999px;">
+            📦 庫存現貨
+          </span>
+        </div>
+
+        <h2 id="qvTitle" style="font-size:20px; font-weight:700; margin-bottom:6px; color:#111;"></h2>
+        <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px;">
+          <span id="qvPrice" style="font-size:22px; font-weight:700; color:var(--color-primary);"></span>
+          <span id="qvOrig" style="font-size:14px; color:var(--color-muted); text-decoration:line-through;"></span>
+        </div>
+
+        <!-- Color Variant Selector Container -->
+        <div class="variant-selector-box" id="qvVariantBox" style="display:none; margin-bottom:14px;">
+          <div class="variant-title" data-i18n="variant_label">選擇款式 / 款式顏色 (Colors):</div>
+          <div class="variant-pills" id="qvVariantPills"></div>
+        </div>
+
+        <!-- Styled Product Description Section -->
+        <div style="margin-bottom:18px; padding:14px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0;">
+          <h4 style="font-size:12px; font-weight:700; color:#334155; margin-bottom:6px; display:flex; align-items:center; gap:4px;" data-i18n="desc_title">
+            📜 商品詳細說明 (Product Details)：
+          </h4>
+          <p id="qvDesc" style="font-size:13px; color:#475569; line-height:1.65; white-space:pre-line;" data-i18n="qv_desc">
+            SKEUOS 精選高品質設計選物，以天然材質與極簡工藝打造，為您的日常生活增添質感美學。
+          </p>
+        </div>
+
+        <!-- Product Tags -->
+        <div id="qvTagsContainer" class="product-tags" style="margin-bottom:20px;"></div>
+
+        <button id="qvAddToCartBtn" class="btn-checkout" style="margin-top:auto;" data-i18n="add_to_cart">加入購物車</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Overlay Modal -->
+  <div class="search-modal" id="searchModal">
+    <div class="search-container">
+      <input type="text" class="search-input" id="searchInput" placeholder="搜尋 SKEUOS 精選套組、手帳本、地毯、純銀飾品..." data-i18n-ph="search_placeholder">
+      <button class="close-btn" id="btnCloseSearch">&times;</button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       1. MERCHANT ADMIN SECURITY AUTH MODAL (商家管理員安全登入 Modal)
+       ========================================================================== -->
+  <div class="admin-auth-modal" id="adminAuthModal">
+    <div class="admin-header" style="background:#111; color:white;">
+      <div class="admin-title-box">
+        <span style="font-size:20px;">🔐</span>
+        <h3 class="admin-title" style="color:white;">SKEUOS 管理員安全登入</h3>
+      </div>
+      <button class="close-btn" id="btnCloseAuth" style="color:white;">&times;</button>
+    </div>
+    <form id="adminLoginForm" onsubmit="handleAdminLogin(event)" style="padding:24px; display:flex; flex-direction:column; gap:16px;">
+      <p style="font-size:13px; color:#666; line-height:1.5;">請輸入商家管理員帳號與密碼以進入庫存與商品管理後台。<br>（預設帳號：<code style="background:#eee; padding:2px 6px; border-radius:4px; font-weight:700;">admin</code> / 密碼：<code style="background:#eee; padding:2px 6px; border-radius:4px; font-weight:700;">skeuos2026</code>）</p>
+      
+      <div class="form-group">
+        <label class="form-label">管理員帳號 (Username)</label>
+        <input type="text" id="authUsername" class="form-input" placeholder="admin" value="admin" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">管理員密碼 (Password)</label>
+        <div style="position:relative;">
+          <input type="password" id="authPassword" class="form-input" style="width:100%; padding-right:40px;" placeholder="請輸入密碼..." value="skeuos2026" required>
+          <button type="button" onclick="togglePassVisibility()" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); font-size:14px; opacity:0.6;">👁️</button>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:8px; font-size:12px; color:#555;">
+        <input type="checkbox" id="authRemember" checked>
+        <label for="authRemember">保持登入狀態 (7天內免重複登入)</label>
+      </div>
+
+      <div id="authErrMsg" style="font-size:12px; color:#ef4444; display:none; font-weight:600;">⚠️ 帳號或密碼不正確，請重新輸入！</div>
+
+      <button type="submit" class="btn-submit-item" style="margin-top:6px;">🔓 驗證登入 (Login)</button>
+    </form>
+  </div>
+
+  <!-- ==========================================================================
+       2. INTERACTIVE IMAGE CROPPER MODAL (商品圖片 1:1 線上裁切 Modal)
+       ========================================================================== -->
+  <div class="cropper-modal" id="cropperModal">
+    <div class="admin-header" style="padding:16px 20px;">
+      <h3 style="font-size:16px; font-weight:700;">✂️ 商品圖片 1:1 裁切工具</h3>
+      <button class="close-btn" id="btnCloseCropper">&times;</button>
+    </div>
+    <div style="padding:20px; display:flex; flex-direction:column; align-items:center; gap:16px;">
+      <p style="font-size:12px; color:#666; text-align:center;">拖曳圖片移動視角，使用下方按鈕旋轉與調整縮放，裁切為 1:1 正方形標籤！</p>
+      
+      <!-- Canvas Crop Container -->
+      <div class="crop-canvas-wrapper" id="cropCanvasWrapper">
+        <canvas id="cropCanvas" width="300" height="300"></canvas>
+      </div>
+
+      <!-- Crop Control Tools -->
+      <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; align-items:center; width:100%;">
+        <button type="button" class="btn-backup" onclick="rotateCropImage(-90)">🔄 左旋 90°</button>
+        <button type="button" class="btn-backup" onclick="rotateCropImage(90)">🔄 右旋 90°</button>
+        <label style="font-size:12px; font-weight:600;">🔍 縮放:</label>
+        <input type="range" id="cropZoomRange" min="0.5" max="3" step="0.05" value="1" oninput="updateCropCanvasZoom(this.value)" style="width:110px;">
+      </div>
+
+      <button type="button" class="btn-submit-item" style="width:100%;" onclick="finishCroppingImage()">✂️ 完成裁切並儲存至商品圖庫 (Confirm Crop)</button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       3. MERCHANT ADMIN SYSTEM MODAL (商家庫存與商品管理系統)
+       ========================================================================== -->
+  <div class="admin-modal" id="adminModal">
+    <div class="admin-header">
+      <div class="admin-title-box">
+        <span style="font-size:20px;">⚙️</span>
+        <h3 class="admin-title">SKEUOS 商家庫存與商品管理系統</h3>
+      </div>
+      <div style="display:flex; align-items:center; gap:12px;">
+        <button class="btn-backup" style="padding:6px 12px; font-size:12px; color:#ef4444; border-color:#fca5a5;" onclick="handleAdminLogout()">🔒 登出後台</button>
+        <button class="close-btn" id="btnCloseAdmin">&times;</button>
+      </div>
+    </div>
+    
+    <div class="admin-body">
+      
+      <!-- Section 1: Add/Edit Product Form -->
+      <div class="admin-section-box" id="adminFormSection">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 id="adminFormHeadTitle" style="font-size:15px; font-weight:700;">➕ 新增 / 上架商品</h4>
+          <button id="btnCancelEdit" type="button" class="btn-backup" style="display:none; color:#64748b;" onclick="resetAdminForm()">❌ 取消編輯</button>
+        </div>
+        <p style="font-size:12px; color:var(--color-muted); margin-bottom:14px;">填寫商品價格、名稱、詳細描述與分類，支援一次選擇多張照片與線上 1:1 裁切，全站自動翻譯切換！</p>
+        
+        <form id="adminAddForm" onsubmit="handleAdminAddProduct(event)">
+          <div class="admin-form-grid">
+            <div class="form-group">
+              <label class="form-label">商品名稱 (Title)</label>
+              <input type="text" id="adminTitleZh" class="form-input" placeholder="例如：THE PLANNER 2027 口袋手帳本" required>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">英文名稱 (Optional / 全站AI自動翻譯)</label>
+              <input type="text" id="adminTitleEn" class="form-input" placeholder="可留空，切換英文時將自動智慧翻譯！">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">售價 (新台幣 NT$ 或美金 USD)</label>
+              <input type="number" step="1" id="adminPrice" class="form-input" placeholder="例如：960 (新台幣) 或 32 (美金)" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">原價 (新台幣 NT$ 或美金 USD)</label>
+              <input type="number" step="1" id="adminOrigPrice" class="form-input" placeholder="例如：1260 (新台幣) 或 42 (美金)">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">商品分類 (Category)</label>
+              <select id="adminCategory" class="form-select" onchange="toggleAdminSubcatGroup(this.value)" required>
+                <option value="stationery" selected>文具手帳 (Stationery &amp; Planners)</option>
+                <option value="bundles">精選組合 (Sets &amp; Bundles)</option>
+                <option value="textiles">織品家飾 (Textiles &amp; Home)</option>
+                <option value="ceramics">陶瓷餐具 (Ceramics &amp; Dining)</option>
+                <option value="jewelry">飾品工藝 (Jewelry &amp; Crafts)</option>
+              </select>
+            </div>
+
+            <div class="form-group" id="adminSubcatGroup" style="display:none;">
+              <label class="form-label" style="color:#0284c7;">💎 飾品材質子分類 (Jewelry Material Subcategory)</label>
+              <select id="adminSubcategory" class="form-select" style="border-color:#38bdf8; background:#f0f9ff;">
+                <option value="silver925" selected>✨ 925純銀 (925 Sterling Silver)</option>
+                <option value="silver_plated">💎 合金鍍銀 (Silver-Plated Alloy)</option>
+                <option value="alloy">⚡ 合金 (Alloy)</option>
+                <option value="titanium">🛡️ 鈦鋼 (Titanium Steel)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">促銷標籤 / 特色 Badge</label>
+              <input type="text" id="adminBadgeZh" class="form-input" placeholder="例如：熱銷款式 / 新品上市 / 獨家限定">
+            </div>
+
+            <!-- Full-width Product Description Textarea -->
+            <div class="form-group full-width">
+              <label class="form-label">商品詳細說明 / 描述 (Description)</label>
+              <textarea id="adminDescZh" class="form-input" rows="3" placeholder="請輸入商品詳細說明，例如：SKEUOS 精選高品質設計選物，以天然材質與極簡工藝打造，為您的日常生活增添質感美學..."></textarea>
+            </div>
+
+            <!-- Multi-Image Upload & Cropping Section -->
+            <div class="form-group full-width">
+              <label class="form-label">商品圖片庫 (支援一次選取多張圖片與 1:1 裁切)</label>
+              <div style="display:flex; flex-wrap:wrap; gap:10px;">
+                <input type="text" id="adminImgPath" class="form-input" style="flex:1; min-width:200px;" placeholder="assets/planner-card-1.jpg 或貼上圖片網址" required>
+                
+                <!-- Hidden file input supporting multiple files -->
+                <input type="file" id="adminPhotoFile" accept="image/*" multiple style="display:none;" onchange="handleMultiplePhotoUpload(event)">
+                
+                <button type="button" class="btn-backup" style="white-space:nowrap; background:#111; color:#fff; border:none; padding:10px 14px; font-weight:600;" onclick="document.getElementById('adminPhotoFile').click()">📱 一次上傳多張圖片 / 拍照</button>
+                
+                <select class="form-select" style="width:180px;" onchange="if(this.value) { addImageToGallery(this.value); this.value=''; }">
+                  <option value="">-- 快速加入預設已知圖檔 --</option>
+                  <option value="assets/planner-card-1.jpg">手帳本-奶油黃/薄荷</option>
+                  <option value="assets/planner-card-2.jpg">手帳本-牛奶白/黑色</option>
+                  <option value="assets/planner-card-3.jpg">手帳本-薰衣草紫</option>
+                  <option value="assets/planner-card-4.jpg">手帳本-朱砂紅</option>
+                  <option value="assets/planner-info.jpg">手帳本-規格說明圖</option>
+                  <option value="assets/new-product-1.jpg">日系亞麻茶巾</option>
+                  <option value="assets/new-product-2.jpg">WENSHUO 羊毛地毯</option>
+                  <option value="assets/new-product-3.jpg">防水野餐墊</option>
+                  <option value="assets/new-product-4.jpg">手作陶瓷馬克杯</option>
+                  <option value="assets/new-product-5.png">純銀戒指系列</option>
+                </select>
+              </div>
+
+              <!-- Multi-Image Thumbnails Gallery Box -->
+              <div style="margin-top:10px; padding:12px; background:#f8fafc; border:1px dashed #cbd5e1; border-radius:8px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span style="font-size:12px; font-weight:700; color:#334155;">🖼️ 已選擇的商品圖庫清單（滑鼠移至圖片可裁切或指定為主圖）：</span>
+                  <span id="galleryCountTag" style="font-size:11px; color:#64748b;">共 0 張</span>
+                </div>
+                <div class="admin-multi-gallery" id="adminMultiGallery">
+                  <!-- Dynamically rendered gallery cards -->
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">標籤 1 (Tag 1)</label>
+              <input type="text" id="adminTag1" class="form-input" placeholder="例如：176頁全彩">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">標籤 2 (Tag 2)</label>
+              <input type="text" id="adminTag2" class="form-input" placeholder="例如：PVC防護軟皮">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">初始庫存數量 (Stock)</label>
+              <input type="number" id="adminStock" class="form-input" value="50" required>
+            </div>
+
+            <button type="submit" id="btnSubmitProduct" class="btn-submit-item">✨ 立即上架 / 新增商品 (Add Product)</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Section 2: Product Inventory Table with Direct Inline Editing -->
+      <div>
+        <h4 style="font-size:15px; font-weight:700; margin-bottom:6px;">📦 全站庫存商品清單 (Inventory List)</h4>
+        <p style="font-size:12px; color:var(--color-muted); margin-bottom:12px;">💡 提示：點擊任何商品行後方的 <strong>`✏️ 編輯`</strong> 即可直接修改該商品的價格、描述、分類與圖片，點擊 🔍 可開啟高清大圖！</p>
+        <div class="inventory-table-wrapper">
+          <table class="inventory-table">
+            <thead>
+              <tr>
+                <th>圖片 (點擊放大)</th>
+                <th>商品名稱 &amp; 描述</th>
+                <th>分類</th>
+                <th>售價 ($)</th>
+                <th>原價 ($)</th>
+                <th>庫存</th>
+                <th>操作與修改</th>
+              </tr>
+            </thead>
+            <tbody id="adminInventoryTbody">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Admin Footer Toolbar -->
+    <div class="admin-footer-toolbar">
+      <div style="display:flex; gap:10px;">
+        <button class="btn-backup" onclick="exportInventoryJSON()">📥 匯出商品 JSON 備份</button>
+        <button class="btn-backup" onclick="document.getElementById('importJsonFile').click()">📤 匯入商品 JSON 備份</button>
+        <input type="file" id="importJsonFile" accept=".json" style="display:none;" onchange="importInventoryJSON(event)">
+      </div>
+      <button class="btn-backup" style="color:#ff4d4f; border-color:#ff4d4f;" onclick="resetInventoryDefault()">🔄 重置為預設庫存</button>
+    </div>
+  </div>
+
+  <!-- Admin Large Image Zoom Preview Modal -->
+  <div class="img-zoom-modal" id="imgZoomModal">
+    <div style="width:100%; display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+      <h4 id="imgZoomTitle" style="font-size:15px; font-weight:700;">商品高解析度大圖預覽</h4>
+      <button class="close-btn" id="btnCloseZoom">&times;</button>
+    </div>
+    <img id="imgZoomPreview" src="" alt="" class="img-zoom-preview">
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ==========================================================================
+       JAVASCRIPT LOGIC & MULTILINGUAL I18N
+       ========================================================================== -->
+  <script>
+    // Multilingual Translations Dictionary
+    const I18N = {
+      zh: {
+        nav_shop: '選物商店',
+        nav_bestsellers: '熱銷推薦',
+        nav_lookbook: '品牌故事誌',
+        admin_btn: '庫存管理',
+        hero_subtitle: 'SKEUOS 戶外與生活選物',
+        hero_title: '野餐風格與生活選物系列',
+        hero_btn: '瀏覽更多',
+        section_title: '精選輯',
+        section_subtitle: '最高享 50% 折扣',
+        tab_all: '全部商品',
+        tab_bundles: '精選組合',
+        tab_textiles: '織品家飾',
+        tab_ceramics: '陶瓷餐具',
+        tab_jewelry: '飾品工藝',
+        tab_stationery: '文具手帳',
+        add_to_cart: '加入購物車',
+        variant_label: '選擇款式顏色 (Color Options):',
+        lb_tagline: 'SKEUOS 故事誌',
+        lb_main_title: '工藝與生活風格特輯',
+        lb1_tag: '封面主打',
+        lb1_title: '陽光野餐與戶外生活',
+        lb2_tag: '文具手帳',
+        lb2_title: 'THE PLANNER 2027 色彩生活頁面',
+        lb3_tag: '職人首飾',
+        lb3_title: '純銀與金屬雕塑首飾',
+        footer_text: '© 2026 SKEUOS 選物店。極簡美學與精緻生活。',
+        cart_title: '您的購物車',
+        cart_empty: '您的購物車目前是空的。',
+        cart_subtotal: '小計',
+        cart_checkout: '前往結帳',
+        qv_desc: 'SKEUOS 精選高品質設計選物，以天然材質與極簡工藝打造，為您的日常生活增添質感美學。',
+        search_placeholder: '搜尋 SKEUOS 精選套組、手帳本、地毯、純銀飾品...',
+        toast_added: '已將「{title}」加入購物車',
+        subcat_all: '全部飾品',
+        subcat_silver925: '✨ 925純銀',
+        subcat_silver_plated: '💎 合金鍍銀',
+        subcat_alloy: '⚡ 合金',
+        subcat_titanium: '🛡️ 鈦鋼',
+        click_to_zoom: '🔍 點擊放大全螢幕圖片',
+        view_details: '放大與說明',
+        desc_title: '📜 商品詳細說明 (Product Details)：'
+      },
+      en: {
+        nav_shop: 'Shop',
+        nav_bestsellers: 'Bestsellers',
+        nav_lookbook: 'Lookbook',
+        admin_btn: 'Admin Panel',
+        hero_subtitle: 'SKEUOS Outdoor & Living',
+        hero_title: 'Crafted Picnic & Living Series',
+        hero_btn: 'Show more',
+        section_title: 'Curated Selection',
+        section_subtitle: 'Save up to 50%',
+        tab_all: 'All Items',
+        tab_bundles: 'Sets & Bundles',
+        tab_textiles: 'Textiles & Home',
+        tab_ceramics: 'Ceramics & Dining',
+        tab_jewelry: 'Jewelry & Crafts',
+        tab_stationery: 'Stationery & Planners',
+        add_to_cart: 'Add to Cart',
+        variant_label: 'Color Options:',
+        lb_tagline: 'SKEUOS STORIES',
+        lb_main_title: 'Craft & Lifestyle Lookbook',
+        lb1_tag: 'Featured Cover',
+        lb1_title: 'Paper Picnic & Sunlit Days',
+        lb2_tag: 'Stationery',
+        lb2_title: 'THE PLANNER 2027 Colorful Pages',
+        lb3_tag: 'Handcrafted Series',
+        lb3_title: 'Silver & Metal Sculptures',
+        footer_text: '© 2026 SKEUOS select shop. Crafted with precision & elegance.',
+        cart_title: 'Your Cart',
+        cart_empty: 'Your shopping cart is currently empty.',
+        cart_subtotal: 'Subtotal',
+        cart_checkout: 'Checkout',
+        qv_desc: 'High quality Scandinavian design item curated by SKEUOS. Meticulously designed with premium materials to elevate your daily home aesthetic.',
+        search_placeholder: 'Search curated SKEUOS sets, notebooks, rugs, rings...',
+        toast_added: 'Added "{title}" to cart',
+        subcat_all: 'All Jewelry',
+        subcat_silver925: '✨ 925 Silver',
+        subcat_silver_plated: '💎 Silver-Plated',
+        subcat_alloy: '⚡ Alloy',
+        subcat_titanium: '🛡️ Titanium Steel',
+        click_to_zoom: '🔍 Click to Enlarge Image',
+        view_details: 'Zoom & Details',
+        desc_title: '📜 Product Details:'
+      }
+    };
+
+    // Initial Product Catalog Data
+    const DEFAULT_PRODUCTS = {
+      14: {
+        id: 14, cat: 'stationery', price: 32, orig: 42, img: 'assets/planner-card-1.jpg', stock: 120,
+        badge: { zh: '6色熱銷', en: '6 COLORS' },
+        title: { zh: 'THE PLANNER 2027 全彩手帳本 (176頁便攜口袋本)', en: 'THE PLANNER 2027 Leatherette Pocket Notebook' },
+        tags: { zh: ['6色可選', 'PVC防護軟皮', '176頁全彩'], en: ['6 Color Options', 'PVC Leatherette', '176 Pages'] },
+        variants: [
+          { name: { zh: '01. 朱砂紅 (Vermilion)', en: '01. Vermilion' }, img: 'assets/planner-vermilion.jpg' },
+          { name: { zh: '02. 奶油黃 (Butter)', en: '02. Butter' }, img: 'assets/planner-card-1.jpg' },
+          { name: { zh: '03. 奶油薄荷 (Cream Mint)', en: '03. Cream Mint' }, img: 'assets/planner-butter-mint.jpg' },
+          { name: { zh: '04. 薰衣草紫 (Lavender)', en: '04. Lavender' }, img: 'assets/planner-lavender.jpg' },
+          { name: { zh: '05. 牛奶白 (Milk White)', en: '05. Milk White' }, img: 'assets/planner-card-2.jpg' },
+          { name: { zh: '06. 經典黑 (Black)', en: '06. Black' }, img: 'assets/planner-white-black.jpg' }
+        ],
+        gallery: [
+          'assets/planner-card-1.jpg',
+          'assets/planner-vermilion.jpg',
+          'assets/planner-lavender.jpg',
+          'assets/planner-card-2.jpg',
+          'assets/planner-info.jpg'
+        ]
+      },
+      1: {
+        id: 1, cat: 'bundles', price: 200, orig: 280, img: 'assets/product-1.jpg', stock: 25,
+        badge: { zh: '超值組合', en: 'VALUE BUNDLE' },
+        title: { zh: '4件組植裁盆器套組', en: '4 Planters Set' },
+        tags: { zh: ['水泥材質', '手工打造'], en: ['Concrete', 'Hand-crafted'] }
+      },
+      2: {
+        id: 2, cat: 'bundles textiles', price: 500, orig: 720, img: 'assets/product-2.jpg', stock: 18,
+        badge: { zh: '', en: '' },
+        title: { zh: '亞麻抱枕套組', en: 'Linen Cushion Bundle' },
+        tags: { zh: ['義大利製造', '純亞麻'], en: ['Italian-made', 'Solid linen'] }
+      },
+      3: {
+        id: 3, cat: 'bundles', price: 120, orig: 160, img: 'assets/product-3.jpg', stock: 30,
+        badge: { zh: '', en: '' },
+        title: { zh: '黃銅燭台套組', en: 'Candleholder Set' },
+        tags: { zh: ['黃銅刷紋', '北歐簡約'], en: ['Brushed brass', 'Scandinavian'] }
+      },
+      4: {
+        id: 4, cat: 'ceramics bundles', price: 140, orig: 220, img: 'assets/product-4.jpg', stock: 20,
+        badge: { zh: '', en: '' },
+        title: { zh: '琥珀花瓶套組', en: 'Glass Vases Set' },
+        tags: { zh: ['手工吹製玻璃', '琥珀透光色澤'], en: ['Mouth-blown glass', 'Amber Tinted'] }
+      },
+      5: {
+        id: 5, cat: 'bundles', price: 180, orig: 270, img: 'assets/product-5.jpg', stock: 15,
+        badge: { zh: '新品上市', en: 'NEW' },
+        title: { zh: '極簡方塊燭台', en: 'Modern Block Candleholders' },
+        tags: { zh: ['極簡幾何設計', '手工拋光'], en: ['Minimalist design', 'Hand-finished'] }
+      },
+      6: {
+        id: 6, cat: 'textiles', price: 80, orig: 100, img: 'assets/product-6.jpg', stock: 40,
+        badge: { zh: '', en: '' },
+        title: { zh: '有機棉毛巾套組', en: 'Organic Cotton Towel Set' },
+        tags: { zh: ['100% 有機棉', '親膚親柔'], en: ['100% Organic', 'Ultra soft'] }
+      },
+      7: {
+        id: 7, cat: 'ceramics', price: 110, orig: 140, img: 'assets/product-7.jpg', stock: 22,
+        badge: { zh: '', en: '' },
+        title: { zh: '極簡陶瓷冷水壺套組', en: 'Minimalist Water Carafe Set' },
+        tags: { zh: ['陶瓷幾何', '北歐美學'], en: ['Ceramic', 'Scandinavian'] }
+      },
+      8: {
+        id: 8, cat: 'textiles bundles', price: 160, orig: 225, img: 'assets/product-8.jpg', stock: 35,
+        badge: { zh: '', en: '' },
+        title: { zh: '編織亞麻萬用毯', en: 'Woven Linen Throw Bundle' },
+        tags: { zh: ['天然亞麻', '舒適觸感'], en: ['Natural linen', 'Cosy texture'] }
+      },
+      9: {
+        id: 9, cat: 'textiles', price: 45, orig: 65, img: 'assets/new-product-1.jpg', stock: 50,
+        badge: { zh: '人氣熱銷', en: 'POPULAR' },
+        title: { zh: '日系印花亞麻茶巾套組', en: 'Patterned Linen Kitchen Towel Set' },
+        tags: { zh: ['100% 有機亞麻', '日系織造'], en: ['100% Organic Linen', 'Japanese Weave'] }
+      },
+      10: {
+        id: 10, cat: 'textiles', price: 220, orig: 310, img: 'assets/new-product-2.jpg', stock: 12,
+        badge: { zh: 'WENSHUO', en: 'WENSHUO' },
+        title: { zh: 'WENSHUO 羊毛編織地毯', en: 'WENSHUO Woven Wool Rug' },
+        tags: { zh: ['柔軟羊毛', '北歐極簡線條'], en: ['Soft Wool', 'Scandinavian Line'] }
+      },
+      11: {
+        id: 11, cat: 'textiles', price: 75, orig: 95, img: 'assets/new-product-3.jpg', stock: 60,
+        badge: { zh: '封面主打', en: 'FEATURED COVER' },
+        title: { zh: '防水防潮紙質野餐墊', en: 'Outdoor Paper Picnic Mat' },
+        tags: { zh: ['防水韌性紙', '可折疊收納'], en: ['Waterproof Paper', 'Foldable'] }
+      },
+      12: {
+        id: 12, cat: 'ceramics', price: 58, orig: 78, img: 'assets/new-product-4.jpg', stock: 28,
+        badge: { zh: '職人手作', en: 'ARTISAN' },
+        title: { zh: '手作質感陶瓷馬克杯', en: 'Crafted Ceramic Coffee Mug' },
+        tags: { zh: ['陶土釉藥', '溫潤手感'], en: ['Glazed Clay', 'Warm Tactile'] }
+      },
+      13: {
+        id: 13, cat: 'jewelry', subcat: 'silver925', price: 130, orig: 180, img: 'assets/new-product-5.png', stock: 16,
+        badge: { zh: '925純銀', en: '925 STERLING' },
+        title: { zh: '工藝師手作純銀戒指系列', en: 'Hand-Forged Silver Ring Series' },
+        tags: { zh: ['925純銀', '金屬雕塑工作室'], en: ['925 Sterling Silver', 'Artisan Studio'] }
+      }
+    };
+
+    // Load Products from localStorage or initialize with DEFAULT_PRODUCTS
+    let PRODUCTS = loadInventoryData();
+    let currentLang = 'zh'; // 'zh' (Traditional Chinese) default
+    let cart = [];
+    let currentCategoryFilter = 'all';
+    let selectedVariant = null;
+
+    function loadInventoryData() {
+      const saved = localStorage.getItem('skeuos_inventory_v2');
+      if (saved) {
+        try { return JSON.parse(saved); } catch(e) {}
+      }
+      return JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+    }
+
+    // Currency Formatter: Traditional Chinese (NT$ 新台幣) vs English ($ USD)
+    function formatPrice(val, lang = currentLang) {
+      if (val === null || val === undefined || isNaN(val) || val === '') return '';
+      const num = parseFloat(val);
+      
+      if (lang === 'zh') {
+        // Traditional Chinese: Display in New Taiwan Dollars (NT$)
+        const ntd = num <= 300 ? Math.round(num * 30) : Math.round(num);
+        return `NT$ ${ntd.toLocaleString('zh-TW')}`;
+      } else {
+        // English: Display in US Dollars ($ USD)
+        const usd = num > 300 ? (num / 30) : num;
+        return `$${usd.toFixed(2)}`;
+      }
+    }
+
+    function saveInventoryData() {
+      localStorage.setItem('skeuos_inventory_v2', JSON.stringify(PRODUCTS));
+      renderProductGrid();
+      renderAdminInventoryTable();
+    }
+
+    // Render Dynamic Product Grid
+    let currentSubcategoryFilter = 'all';
+
+    function renderProductGrid() {
+      const grid = document.getElementById('productGrid');
+      if (!grid) return;
+
+      const productIds = Object.keys(PRODUCTS).sort((a,b) => parseInt(b) - parseInt(a)); // Newest first
+
+      grid.innerHTML = productIds.map(id => {
+        const p = PRODUCTS[id];
+        const title = p.title[currentLang] || (currentLang === 'en' ? autoTranslateZhToEn(p.title.zh) : p.title.zh);
+        const badge = p.badge ? (p.badge[currentLang] || (currentLang === 'en' ? autoTranslateZhToEn(p.badge.zh) : p.badge.zh)) : '';
+        const tags = (p.tags && p.tags[currentLang] && p.tags[currentLang].length > 0) ? p.tags[currentLang] : ((p.tags && p.tags.zh) ? p.tags.zh.map(t => currentLang === 'en' ? autoTranslateZhToEn(t) : t) : []);
+        const isDiscount = p.orig && p.orig > p.price;
+        const discountPct = isDiscount ? Math.round((1 - p.price / p.orig) * 100) : 0;
+
+        return `
+          <div class="product-card" data-id="${id}" data-cat="${p.cat}" data-subcat="${p.subcat || ''}">
+            <div class="product-image-box" onclick="openQuickView(${id})">
+              ${badge ? `<span class="badge-tag-left">${badge}</span>` : ''}
+              ${isDiscount ? `<span class="badge-discount">-${discountPct}%</span>` : ''}
+              <img src="${p.img}" alt="${title}" class="product-image">
+              <div class="card-action-bar">
+                <button class="btn-card-action" onclick="event.stopPropagation(); openQuickView(${id});">
+                  🔍 ${I18N[currentLang].view_details || '放大與說明'}
+                </button>
+                <button class="btn-card-action" style="background:var(--color-primary); color:white;" onclick="event.stopPropagation(); addToCart(${id});">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> ${I18N[currentLang].add_to_cart}
+                </button>
+              </div>
+            </div>
+            <div class="product-info">
+              <div class="product-price-line">
+                <span class="price-current">${formatPrice(p.price, currentLang)}</span>
+                ${p.orig ? `<span class="price-original">${formatPrice(p.orig, currentLang)}</span>` : ''}
+              </div>
+              <h3 class="product-title">${title}</h3>
+              <div class="product-rating">
+                <div class="stars">
+                  <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  <svg class="star-icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </div>
+                <span class="review-count">(${p.stock || 20})</span>
+              </div>
+              <div class="product-tags">
+                ${tags.map(t => `<span class="tag-pill">${t}</span>`).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Re-attach quick view click listeners
+      document.querySelectorAll('.product-card').forEach(card => {
+        card.addEventListener('click', () => {
+          const id = parseInt(card.dataset.id);
+          openQuickView(id);
+        });
+      });
+
+      filterCategory(currentCategoryFilter, currentSubcategoryFilter);
+    }
+
+    function filterCategory(category, subcategory = 'all') {
+      currentCategoryFilter = category;
+      currentSubcategoryFilter = subcategory;
+
+      const jewelrySubTabs = document.getElementById('jewelrySubTabs');
+      if (jewelrySubTabs) {
+        jewelrySubTabs.style.display = (category === 'jewelry') ? 'flex' : 'none';
+      }
+
+      document.querySelectorAll('.product-card').forEach(card => {
+        const cardCat = card.dataset.cat || '';
+        const cardSubcat = card.dataset.subcat || '';
+
+        const matchCat = (category === 'all' || cardCat.includes(category));
+        const matchSubcat = (category !== 'jewelry' || subcategory === 'all' || cardSubcat === subcategory);
+
+        if (matchCat && matchSubcat) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // DOM Elements
+    const btnToggleLang = document.getElementById('btnToggleLang');
+    const langBtnText = document.getElementById('langBtnText');
+    const adminModal = document.getElementById('adminModal');
+    const btnOpenAdmin = document.getElementById('btnOpenAdmin');
+    const btnCloseAdmin = document.getElementById('btnCloseAdmin');
+    const imgZoomModal = document.getElementById('imgZoomModal');
+    const imgZoomPreview = document.getElementById('imgZoomPreview');
+    const btnCloseZoom = document.getElementById('btnCloseZoom');
+
+    // Language Toggle Listener
+    btnToggleLang.addEventListener('click', () => {
+      currentLang = (currentLang === 'zh') ? 'en' : 'zh';
+      applyLanguage(currentLang);
+      showToast(currentLang === 'zh' ? '已切換為 繁體中文' : 'Switched to English');
+    });
+
+    function applyLanguage(lang) {
+      document.documentElement.lang = (lang === 'zh') ? 'zh-TW' : 'en';
+      langBtnText.textContent = (lang === 'zh') ? 'EN / 繁中' : '繁中 / EN';
+
+      // Update static elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.dataset.i18n;
+        if (I18N[lang] && I18N[lang][key]) {
+          el.textContent = I18N[lang][key];
+        }
+      });
+
+      // Update placeholders
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.dataset.i18nPh;
+        if (I18N[lang] && I18N[lang][key]) {
+          el.placeholder = I18N[lang][key];
+        }
+      });
+
+      renderProductGrid();
+      renderCart();
+    }
+
+    // Admin Security Authentication Credentials & Session Management
+    let isAdminAuthed = sessionStorage.getItem('skeuos_admin_authed') === 'true' || localStorage.getItem('skeuos_admin_authed') === 'true';
+
+    function openAdminAuth() {
+      backdrop.classList.add('active');
+      document.getElementById('adminAuthModal').classList.add('active');
+      document.getElementById('authErrMsg').style.display = 'none';
+    }
+
+    function closeAdminAuth() {
+      document.getElementById('adminAuthModal').classList.remove('active');
+      if (!adminModal.classList.contains('active') && !cartDrawer.classList.contains('active') && !searchModal.classList.contains('active') && !quickViewModal.classList.contains('active')) {
+        backdrop.classList.remove('active');
+      }
+    }
+
+    function togglePassVisibility() {
+      const passInput = document.getElementById('authPassword');
+      passInput.type = (passInput.type === 'password') ? 'text' : 'password';
+    }
+
+    function handleAdminLogin(e) {
+      e.preventDefault();
+      const u = document.getElementById('authUsername').value.trim();
+      const p = document.getElementById('authPassword').value.trim();
+      const remember = document.getElementById('authRemember').checked;
+
+      if (u === 'admin' && p === 'skeuos2026') {
+        isAdminAuthed = true;
+        if (remember) {
+          localStorage.setItem('skeuos_admin_authed', 'true');
+        } else {
+          sessionStorage.setItem('skeuos_admin_authed', 'true');
+        }
+        closeAdminAuth();
+        openAdminModalDirect();
+        showToast(currentLang === 'zh' ? '🔓 管理員安全登入成功！' : '🔓 Admin authenticated successfully!');
+      } else {
+        document.getElementById('authErrMsg').style.display = 'block';
+      }
+    }
+
+    function handleAdminLogout() {
+      isAdminAuthed = false;
+      sessionStorage.removeItem('skeuos_admin_authed');
+      localStorage.removeItem('skeuos_admin_authed');
+      closeAdmin();
+      showToast(currentLang === 'zh' ? '🔒 已成功登出商家管理後台' : '🔒 Logged out from Admin Panel');
+    }
+
+    document.getElementById('btnCloseAuth').addEventListener('click', closeAdminAuth);
+
+    // Admin Modal Controls with Authentication Guard
+    btnOpenAdmin.addEventListener('click', () => {
+      if (isAdminAuthed) {
+        openAdminModalDirect();
+      } else {
+        openAdminAuth();
+      }
+    });
+
+    function openAdminModalDirect() {
+      backdrop.classList.add('active');
+      adminModal.classList.add('active');
+      renderAdminInventoryTable();
+      renderAdminMultiGallery();
+    }
+
+    function closeAdmin() {
+      adminModal.classList.remove('active');
+      if (!cartDrawer.classList.contains('active') && !searchModal.classList.contains('active') && !quickViewModal.classList.contains('active') && !imgZoomModal.classList.contains('active') && !document.getElementById('adminAuthModal').classList.contains('active') && !document.getElementById('cropperModal').classList.contains('active')) {
+        backdrop.classList.remove('active');
+      }
+    }
+
+    btnCloseAdmin.addEventListener('click', closeAdmin);
+
+    // Large Image Zoom Preview Modal Functions
+    function openImageZoom(imgSrc, title) {
+      imgZoomPreview.src = imgSrc;
+      document.getElementById('imgZoomTitle').textContent = (currentLang === 'zh' ? '🔍 高解析度大圖預覽：' : '🔍 Image Preview: ') + title;
+      imgZoomModal.classList.add('active');
+    }
+
+    function closeImageZoom() {
+      imgZoomModal.classList.remove('active');
+    }
+
+    btnCloseZoom.addEventListener('click', closeImageZoom);
+
+    // Automatic Chinese-to-English Auto-Translation Engine
+    const TRANSLATE_DICT = [
+      { zh: 'THE PLANNER 2027 口袋手帳本', en: 'THE PLANNER 2027 Leatherette Pocket Notebook' },
+      { zh: '日系印花亞麻茶巾套組', en: 'Patterned Linen Kitchen Towel Set' },
+      { zh: 'WENSHUO 羊毛編織地毯', en: 'WENSHUO Woven Wool Rug' },
+      { zh: '防水防潮紙質野餐墊', en: 'Outdoor Paper Picnic Mat' },
+      { zh: '手作質感陶瓷馬克杯', en: 'Crafted Ceramic Coffee Mug' },
+      { zh: '工藝師手作純銀戒指系列', en: 'Hand-Forged Silver Ring Series' },
+      { zh: '4件組植裁盆器套組', en: '4 Planters Set' },
+      { zh: '亞麻抱枕套組', en: 'Linen Cushion Bundle' },
+      { zh: '黃銅燭台套組', en: 'Candleholder Set' },
+      { zh: '琥珀花瓶套組', en: 'Glass Vases Set' },
+      { zh: '極簡方塊燭台', en: 'Modern Block Candleholders' },
+      { zh: '有機棉毛巾套組', en: 'Organic Cotton Towel Set' },
+      { zh: '極簡陶瓷冷水壺套組', en: 'Minimalist Water Carafe Set' },
+      { zh: '編織亞麻萬用毯', en: 'Woven Linen Throw Bundle' }
+    ];
+
+    const WORD_REPLACEMENTS = [
+      { zh: /手帳本|筆記本/g, en: 'Notebook' },
+      { zh: /茶巾|抹布|毛巾/g, en: 'Towel' },
+      { zh: /地毯|踏墊/g, en: 'Rug' },
+      { zh: /野餐墊|野餐/g, en: 'Picnic Mat' },
+      { zh: /馬克杯|水杯|咖啡杯/g, en: 'Mug' },
+      { zh: /戒指|首飾|飾品/g, en: 'Ring' },
+      { zh: /陶瓷|陶藝/g, en: 'Ceramic' },
+      { zh: /亞麻/g, en: 'Linen' },
+      { zh: /純銀|銀飾/g, en: 'Sterling Silver' },
+      { zh: /燭台/g, en: 'Candleholder' },
+      { zh: /花瓶/g, en: 'Vase' },
+      { zh: /套組|組合/g, en: 'Set' },
+      { zh: /極簡/g, en: 'Minimalist' },
+      { zh: /質感|精選/g, en: 'Curated' },
+      { zh: /手作|工藝/g, en: 'Handcrafted' },
+      { zh: /日系/g, en: 'Japanese' },
+      { zh: /北歐/g, en: 'Scandinavian' },
+      { zh: /防水/g, en: 'Waterproof' },
+      { zh: /有機棉/g, en: 'Organic Cotton' }
+    ];
+
+    function autoTranslateZhToEn(textZh) {
+      if (!textZh || !textZh.trim()) return '';
+      const text = textZh.trim();
+
+      const exactMatch = TRANSLATE_DICT.find(d => d.zh === text);
+      if (exactMatch) return exactMatch.en;
+
+      let translated = text;
+      WORD_REPLACEMENTS.forEach(rule => {
+        translated = translated.replace(rule.zh, rule.en + ' ');
+      });
+
+      translated = translated.replace(/\s+/g, ' ').trim();
+      if (translated === text) {
+        return 'SKEUOS Curated Item - ' + text;
+      }
+      return translated;
+    }
+
+    // Multi-Image Gallery & Interactive Canvas Cropper
+    let currentGalleryImages = [];
+    let cropperTargetIndex = null;
+    let cropImgObj = new Image();
+    let cropState = { scale: 1, rotate: 0, offsetX: 0, offsetY: 0 };
+    let isDraggingCrop = false;
+    let dragStartPos = { x: 0, y: 0 };
+
+    function handleMultiplePhotoUpload(event) {
+      const files = Array.from(event.target.files);
+      if (!files || files.length === 0) return;
+
+      let loadedCount = 0;
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const dataUrl = e.target.result;
+          addImageToGallery(dataUrl);
+          loadedCount++;
+          if (loadedCount === files.length) {
+            showToast(currentLang === 'zh' ? `📷 已成功載入 ${files.length} 張相片圖檔！` : `📷 Loaded ${files.length} images!`);
+          }
+        };
+        reader.readAsDataURL(file);
+      });
+      event.target.value = '';
+    }
+
+    function addImageToGallery(imgUrl) {
+      if (!imgUrl) return;
+      if (!currentGalleryImages.includes(imgUrl)) {
+        currentGalleryImages.push(imgUrl);
+      }
+      if (currentGalleryImages.length > 0) {
+        document.getElementById('adminImgPath').value = currentGalleryImages[0];
+      }
+      renderAdminMultiGallery();
+    }
+
+    function removeImageFromGallery(index) {
+      currentGalleryImages.splice(index, 1);
+      if (currentGalleryImages.length > 0) {
+        document.getElementById('adminImgPath').value = currentGalleryImages[0];
+      } else {
+        document.getElementById('adminImgPath').value = '';
+      }
+      renderAdminMultiGallery();
+    }
+
+    function setMainCoverImage(index) {
+      if (index >= 0 && index < currentGalleryImages.length) {
+        const mainImg = currentGalleryImages.splice(index, 1)[0];
+        currentGalleryImages.unshift(mainImg);
+        document.getElementById('adminImgPath').value = mainImg;
+        renderAdminMultiGallery();
+        showToast(currentLang === 'zh' ? '⭐ 已成功指定為主圖！' : '⭐ Set as main cover image!');
+      }
+    }
+
+    function renderAdminMultiGallery() {
+      const galleryBox = document.getElementById('adminMultiGallery');
+      const countTag = document.getElementById('galleryCountTag');
+      if (!galleryBox) return;
+
+      countTag.textContent = `共 ${currentGalleryImages.length} 張`;
+
+      if (currentGalleryImages.length === 0) {
+        const inputVal = document.getElementById('adminImgPath').value.trim();
+        if (inputVal) {
+          currentGalleryImages.push(inputVal);
+        }
+      }
+
+      galleryBox.innerHTML = currentGalleryImages.map((imgSrc, idx) => `
+        <div class="admin-thumb-card ${idx === 0 ? 'is-cover' : ''}">
+          <img src="${imgSrc}" class="admin-thumb-img">
+          ${idx === 0 ? `<span class="thumb-cover-badge">⭐ 主圖</span>` : ''}
+          <div class="thumb-actions-overlay">
+            <button type="button" class="btn-thumb-mini" onclick="openCropper(${idx})">✂️ 裁切 1:1</button>
+            ${idx !== 0 ? `<button type="button" class="btn-thumb-mini" onclick="setMainCoverImage(${idx})">⭐ 設為主圖</button>` : ''}
+            <button type="button" class="btn-thumb-mini" style="color:#ef4444;" onclick="removeImageFromGallery(${idx})">🗑️ 移除</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Canvas Cropper Modal Logic
+    const cropperModal = document.getElementById('cropperModal');
+    const cropCanvas = document.getElementById('cropCanvas');
+    const btnCloseCropper = document.getElementById('btnCloseCropper');
+
+    function openCropper(index) {
+      if (index < 0 || index >= currentGalleryImages.length) return;
+      cropperTargetIndex = index;
+      const imgSrc = currentGalleryImages[index];
+
+      cropImgObj = new Image();
+      cropImgObj.crossOrigin = "anonymous";
+      cropImgObj.onload = function() {
+        cropState = { scale: 1, rotate: 0, offsetX: 0, offsetY: 0 };
+        document.getElementById('cropZoomRange').value = 1;
+        drawCropCanvas();
+        cropperModal.classList.add('active');
+        backdrop.classList.add('active');
+      };
+      cropImgObj.src = imgSrc;
+    }
+
+    function closeCropper() {
+      cropperModal.classList.remove('active');
+    }
+
+    btnCloseCropper.addEventListener('click', closeCropper);
+
+    function drawCropCanvas() {
+      const ctx = cropCanvas.getContext('2d');
+      const w = cropCanvas.width;
+      const h = cropCanvas.height;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.save();
+      ctx.translate(w / 2 + cropState.offsetX, h / 2 + cropState.offsetY);
+      ctx.rotate((cropState.rotate * Math.PI) / 180);
+      ctx.scale(cropState.scale, cropState.scale);
+
+      const aspect = cropImgObj.width / cropImgObj.height;
+      let drawW, drawH;
+      if (aspect > 1) {
+        drawH = h;
+        drawW = h * aspect;
+      } else {
+        drawW = w;
+        drawH = w / aspect;
+      }
+
+      ctx.drawImage(cropImgObj, -drawW / 2, -drawH / 2, drawW, drawH);
+      ctx.restore();
+    }
+
+    function rotateCropImage(deg) {
+      cropState.rotate = (cropState.rotate + deg) % 360;
+      drawCropCanvas();
+    }
+
+    function updateCropCanvasZoom(val) {
+      cropState.scale = parseFloat(val);
+      drawCropCanvas();
+    }
+
+    // Drag Canvas Image
+    const canvasWrapper = document.getElementById('cropCanvasWrapper');
+    if (canvasWrapper) {
+      canvasWrapper.addEventListener('mousedown', (e) => {
+        isDraggingCrop = true;
+        dragStartPos = { x: e.clientX - cropState.offsetX, y: e.clientY - cropState.offsetY };
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isDraggingCrop) return;
+        cropState.offsetX = e.clientX - dragStartPos.x;
+        cropState.offsetY = e.clientY - dragStartPos.y;
+        drawCropCanvas();
+      });
+
+      window.addEventListener('mouseup', () => { isDraggingCrop = false; });
+
+      canvasWrapper.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDraggingCrop = true;
+          dragStartPos = { x: e.touches[0].clientX - cropState.offsetX, y: e.touches[0].clientY - cropState.offsetY };
+        }
+      });
+
+      canvasWrapper.addEventListener('touchmove', (e) => {
+        if (!isDraggingCrop || e.touches.length !== 1) return;
+        cropState.offsetX = e.touches[0].clientX - dragStartPos.x;
+        cropState.offsetY = e.touches[0].clientY - dragStartPos.y;
+        drawCropCanvas();
+      });
+
+      canvasWrapper.addEventListener('touchend', () => { isDraggingCrop = false; });
+    }
+
+    function finishCroppingImage() {
+      const croppedDataUrl = cropCanvas.toDataURL('image/jpeg', 0.92);
+      if (cropperTargetIndex !== null && cropperTargetIndex < currentGalleryImages.length) {
+        currentGalleryImages[cropperTargetIndex] = croppedDataUrl;
+        if (cropperTargetIndex === 0) {
+          document.getElementById('adminImgPath').value = croppedDataUrl;
+        }
+        renderAdminMultiGallery();
+        showToast(currentLang === 'zh' ? '✂️ 圖片 1:1 裁切成功！' : '✂️ Image cropped 1:1 successfully!');
+      }
+      closeCropper();
+    }
+
+    // Product Edit & Form Management
+    let currentEditingId = null;
+
+    function editProductDirect(id) {
+      const p = PRODUCTS[id];
+      if (!p) return;
+
+      currentEditingId = id;
+
+      document.getElementById('adminTitleZh').value = p.title.zh || '';
+      document.getElementById('adminTitleEn').value = p.title.en || '';
+      document.getElementById('adminPrice').value = p.price;
+      document.getElementById('adminOrigPrice').value = p.orig || '';
+      document.getElementById('adminCategory').value = p.cat.split(' ')[0] || 'stationery';
+      document.getElementById('adminBadgeZh').value = p.badge ? (p.badge.zh || '') : '';
+      document.getElementById('adminDescZh').value = p.desc ? (p.desc.zh || '') : '';
+      document.getElementById('adminTag1').value = (p.tags && p.tags.zh && p.tags.zh[0]) ? p.tags.zh[0] : '';
+      document.getElementById('adminTag2').value = (p.tags && p.tags.zh && p.tags.zh[1]) ? p.tags.zh[1] : '';
+      document.getElementById('adminStock').value = p.stock || 50;
+
+      currentGalleryImages = p.gallery ? [...p.gallery] : [p.img];
+      document.getElementById('adminImgPath').value = p.img;
+      renderAdminMultiGallery();
+
+      document.getElementById('adminFormHeadTitle').textContent = `✏️ 編輯修改商品 (ID: #${id})`;
+      document.getElementById('btnSubmitProduct').textContent = `💾 儲存修改內容 (Save Changes)`;
+      document.getElementById('btnCancelEdit').style.display = 'inline-flex';
+
+      document.getElementById('adminFormSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function resetAdminForm() {
+      currentEditingId = null;
+      document.getElementById('adminAddForm').reset();
+      currentGalleryImages = [];
+      renderAdminMultiGallery();
+
+      document.getElementById('adminFormHeadTitle').textContent = `➕ 新增 / 上架商品`;
+      document.getElementById('btnSubmitProduct').textContent = `✨ 立即上架 / 新增商品 (Add Product)`;
+      document.getElementById('btnCancelEdit').style.display = 'none';
+    }
+
+    // Admin Add / Update Product Handler
+    function handleAdminAddProduct(e) {
+      e.preventDefault();
+
+      const titleZh = document.getElementById('adminTitleZh').value.trim();
+      let titleEn = document.getElementById('adminTitleEn').value.trim();
+      if (!titleEn) {
+        titleEn = autoTranslateZhToEn(titleZh);
+      }
+
+      const price = parseFloat(document.getElementById('adminPrice').value);
+      const origPrice = parseFloat(document.getElementById('adminOrigPrice').value) || null;
+      const cat = document.getElementById('adminCategory').value;
+      const badgeZh = document.getElementById('adminBadgeZh').value.trim();
+      const descZh = document.getElementById('adminDescZh').value.trim();
+      const descEn = autoTranslateZhToEn(descZh);
+      const imgPath = currentGalleryImages.length > 0 ? currentGalleryImages[0] : document.getElementById('adminImgPath').value.trim();
+      const tag1 = document.getElementById('adminTag1').value.trim();
+      const tag2 = document.getElementById('adminTag2').value.trim();
+      const stock = parseInt(document.getElementById('adminStock').value) || 50;
+
+      const targetId = currentEditingId ? currentEditingId : Date.now();
+
+      PRODUCTS[targetId] = {
+        id: targetId,
+        cat: cat,
+        price: price,
+        orig: origPrice,
+        img: imgPath,
+        stock: stock,
+        badge: { zh: badgeZh, en: badgeZh ? autoTranslateZhToEn(badgeZh) : '' },
+        title: { zh: titleZh, en: titleEn },
+        desc: { zh: descZh, en: descEn },
+        tags: { 
+          zh: [tag1, tag2].filter(Boolean), 
+          en: [tag1, tag2].filter(Boolean).map(t => autoTranslateZhToEn(t)) 
+        },
+        gallery: currentGalleryImages.length > 0 ? [...currentGalleryImages] : [imgPath]
+      };
+
+      saveInventoryData();
+
+      if (currentEditingId) {
+        showToast(currentLang === 'zh' ? `已成功儲存「${titleZh}」的修改！` : `Successfully updated "${titleEn}"!`);
+      } else {
+        showToast(currentLang === 'zh' ? `成功上架「${titleZh}」！` : `Successfully added "${titleEn}"!`);
+      }
+
+      resetAdminForm();
+    }
+
+    // Render Admin Inventory Table with Direct Edit Controls
+    function renderAdminInventoryTable() {
+      const tbody = document.getElementById('adminInventoryTbody');
+      if (!tbody) return;
+
+      const productIds = Object.keys(PRODUCTS).sort((a,b) => parseInt(b) - parseInt(a));
+
+      tbody.innerHTML = productIds.map(id => {
+        const p = PRODUCTS[id];
+        const titleZh = p.title.zh || p.title.en;
+        const descZh = p.desc ? (p.desc.zh || '') : '';
+        return `
+          <tr>
+            <td>
+              <img src="${p.img}" class="table-thumb" title="點擊放大觀看大圖" onclick="openImageZoom('${p.img}', '${titleZh}')">
+            </td>
+            <td style="max-width:220px;">
+              <strong style="font-size:13px; color:#111;">${titleZh}</strong><br>
+              <span style="font-size:11px; color:#64748b;">${p.title.en || ''}</span>
+              ${descZh ? `<div style="font-size:11px; color:#94a3b8; max-height:2.4em; overflow:hidden; text-overflow:ellipsis;">${descZh}</div>` : ''}
+            </td>
+            <td>
+              <select class="form-select" style="padding:4px 8px; font-size:12px;" onchange="updateProductCategoryDirect(${id}, this.value)">
+                <option value="stationery" ${p.cat.includes('stationery') ? 'selected' : ''}>文具手帳</option>
+                <option value="bundles" ${p.cat.includes('bundles') ? 'selected' : ''}>精選組合</option>
+                <option value="textiles" ${p.cat.includes('textiles') ? 'selected' : ''}>織品家飾</option>
+                <option value="ceramics" ${p.cat.includes('ceramics') ? 'selected' : ''}>陶瓷餐具</option>
+                <option value="jewelry" ${p.cat.includes('jewelry') ? 'selected' : ''}>飾品工藝</option>
+              </select>
+            </td>
+            <td>
+              <input type="number" step="1" value="${p.price}" style="width:75px; padding:4px; font-weight:700;" onchange="updateProductPriceDirect(${id}, this.value)"><br>
+              <span style="font-size:10px; color:#64748b;">${formatPrice(p.price, 'zh')} / ${formatPrice(p.price, 'en')}</span>
+            </td>
+            <td>
+              <input type="number" step="1" value="${p.orig || ''}" placeholder="無" style="width:75px; padding:4px; color:#888;" onchange="updateProductOrigPriceDirect(${id}, this.value)"><br>
+              <span style="font-size:10px; color:#94a3b8;">${p.orig ? formatPrice(p.orig, 'zh') : '-'}</span>
+            </td>
+            <td>
+              <input type="number" value="${p.stock || 0}" style="width:60px; padding:4px;" onchange="updateStockDirect(${id}, this.value)">
+            </td>
+            <td>
+              <div class="table-actions">
+                <button class="btn-backup" style="padding:5px 9px; font-size:12px; background:#f8fafc; font-weight:700; color:#1e293b;" onclick="editProductDirect(${id})">✏️ 編輯</button>
+                <button class="btn-backup" style="padding:5px 8px; font-size:11px;" onclick="openImageZoom('${p.img}', '${titleZh}')">🔍 放大</button>
+                <button class="btn-mini-del" style="padding:5px 8px; font-size:11px;" onclick="deleteProductDirect(${id})">🗑️ 刪除</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updateProductPriceDirect(id, newPrice) {
+      if (PRODUCTS[id]) {
+        PRODUCTS[id].price = parseFloat(newPrice) || 0;
+        saveInventoryData();
+        showToast(currentLang === 'zh' ? '售價已即時更新！' : 'Price updated!');
+      }
+    }
+
+    function updateProductOrigPriceDirect(id, newOrig) {
+      if (PRODUCTS[id]) {
+        PRODUCTS[id].orig = parseFloat(newOrig) || null;
+        saveInventoryData();
+        showToast(currentLang === 'zh' ? '原價已更新！' : 'Original price updated!');
+      }
+    }
+
+    function updateProductCategoryDirect(id, newCat) {
+      if (PRODUCTS[id]) {
+        PRODUCTS[id].cat = newCat;
+        saveInventoryData();
+        showToast(currentLang === 'zh' ? '商品分類已更新！' : 'Category updated!');
+      }
+    }
+
+    function updateStockDirect(id, newStock) {
+      if (PRODUCTS[id]) {
+        PRODUCTS[id].stock = parseInt(newStock) || 0;
+        saveInventoryData();
+        showToast(currentLang === 'zh' ? '庫存數量已更新' : 'Stock count updated');
+      }
+    }
+
+    function deleteProductDirect(id) {
+      if (confirm(currentLang === 'zh' ? '確定要刪除/下架此商品嗎？' : 'Are you sure you want to delete this product?')) {
+        delete PRODUCTS[id];
+        saveInventoryData();
+        showToast(currentLang === 'zh' ? '商品已成功下架刪除' : 'Product deleted successfully');
+      }
+    }
+
+    // JSON Export / Import
+    function exportInventoryJSON() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(PRODUCTS, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `SKEUOS_Inventory_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast(currentLang === 'zh' ? '已成功匯出商品 JSON 備份檔' : 'Inventory JSON exported successfully');
+    }
+
+    function importInventoryJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (typeof imported === 'object') {
+            PRODUCTS = imported;
+            saveInventoryData();
+            showToast(currentLang === 'zh' ? '成功匯入商品資料備份！' : 'Inventory imported successfully!');
+          }
+        } catch(err) {
+          alert('JSON 檔案格式錯誤！');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    function resetInventoryDefault() {
+      if (confirm(currentLang === 'zh' ? '確定要重置為預設商品庫存嗎？' : 'Reset to default products catalog?')) {
+        PRODUCTS = JSON.parse(JSON.stringify(DEFAULT_PRODUCTS));
+        saveInventoryData();
+        showToast(currentLang === 'zh' ? '已重置為預設商品目錄' : 'Reset to default products');
+      }
+    }
+
+    // Sticky Header Scroll Listener
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 40) {
+        headerWrapper.classList.add('scrolled');
+      } else {
+        headerWrapper.classList.remove('scrolled');
+      }
+    });
+
+    // Category & Subcategory Tabs Filtering Logic
+    const filterTabs = document.getElementById('filterTabs');
+    if (filterTabs) {
+      filterTabs.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterTabs.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const category = btn.dataset.cat;
+          filterCategory(category);
+        });
+      });
+    }
+
+    const jewelrySubTabs = document.getElementById('jewelrySubTabs');
+    if (jewelrySubTabs) {
+      jewelrySubTabs.querySelectorAll('.sub-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          jewelrySubTabs.querySelectorAll('.sub-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+
+          const subcat = btn.dataset.subcat;
+          filterCategory('jewelry', subcat);
+        });
+      });
+    }
+
+    // Toast Function
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => toast.classList.add('show'), 10);
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 2500);
+    }
+
+    // Cart Drawer Controls
+    function openCart() {
+      backdrop.classList.add('active');
+      cartDrawer.classList.add('active');
+    }
+
+    function closeCart() {
+      backdrop.classList.remove('active');
+      cartDrawer.classList.remove('active');
+    }
+
+    btnOpenCart.addEventListener('click', openCart);
+    btnCloseCart.addEventListener('click', closeCart);
+
+    // Add to Cart Logic
+    function addToCart(productId, variantName = null) {
+      const product = PRODUCTS[productId];
+      if (!product) return;
+
+      const itemTitle = variantName ? `${product.title[currentLang] || product.title.zh} - ${variantName}` : (product.title[currentLang] || product.title.zh);
+      const cartKey = `${productId}_${variantName || 'default'}`;
+
+      const existingIndex = cart.findIndex(item => item.key === cartKey);
+      if (existingIndex > -1) {
+        cart[existingIndex].qty += 1;
+      } else {
+        cart.push({
+          key: cartKey,
+          id: productId,
+          titleStr: itemTitle,
+          price: product.price,
+          img: product.img,
+          qty: 1
+        });
+      }
+
+      renderCart();
+      const toastMsg = I18N[currentLang].toast_added.replace('{title}', itemTitle);
+      showToast(toastMsg);
+      openCart();
+    }
+
+    function updateQty(productId, delta) {
+      const existingIndex = cart.findIndex(item => item.id === productId || item.key === productId);
+      if (existingIndex > -1) {
+        cart[existingIndex].qty += delta;
+        if (cart[existingIndex].qty <= 0) {
+          cart.splice(existingIndex, 1);
+        }
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+      const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+      cartBadgeCount.textContent = totalQty;
+      cartSubtotal.textContent = formatPrice(totalAmount, currentLang);
+
+      if (cart.length === 0) {
+        cartBody.innerHTML = `<div class="cart-empty">${I18N[currentLang].cart_empty}</div>`;
+        return;
+      }
+
+      cartBody.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <img src="${item.img}" alt="${item.titleStr}" class="cart-item-img">
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.titleStr}</div>
+            <div class="cart-item-price">${formatPrice(item.price, currentLang)}</div>
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="updateQty('${item.key}', -1)">-</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="updateQty('${item.key}', 1)">+</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Quick View Controls (Support Image Zoom, Color Variants & Full Description)
+    function openQuickView(productId) {
+      const product = PRODUCTS[productId];
+      if (!product) return;
+
+      qvImg.src = product.img;
+      const titleStr = product.title[currentLang] || (currentLang === 'en' ? autoTranslateZhToEn(product.title.zh) : product.title.zh);
+      qvTitle.textContent = titleStr;
+      qvPrice.textContent = formatPrice(product.price, currentLang);
+      qvOrig.textContent = product.orig ? formatPrice(product.orig, currentLang) : '';
+
+      // Image Click to High-Res Zoom
+      const qvImgContainer = document.getElementById('qvImgContainer');
+      if (qvImgContainer) {
+        qvImgContainer.onclick = () => openImageZoom(qvImg.src, titleStr);
+      }
+
+      // Stock Tag
+      const stockEl = document.getElementById('qvStockTag');
+      if (stockEl) {
+        stockEl.textContent = (currentLang === 'zh') ? `📦 庫存現貨 (${product.stock || 50} 件)` : `📦 Stock: In Stock (${product.stock || 50} pcs)`;
+      }
+
+      // Category Tag
+      const catEl = document.getElementById('qvCatTag');
+      if (catEl) {
+        const catMap = {
+          stationery: currentLang === 'zh' ? '文具手帳' : 'Stationery',
+          bundles: currentLang === 'zh' ? '精選組合' : 'Bundles',
+          textiles: currentLang === 'zh' ? '織品家飾' : 'Textiles',
+          ceramics: currentLang === 'zh' ? '陶瓷餐具' : 'Ceramics',
+          jewelry: currentLang === 'zh' ? '飾品工藝' : 'Jewelry'
+        };
+        const subcatMap = {
+          silver925: currentLang === 'zh' ? '✨ 925純銀' : '✨ 925 Silver',
+          silver_plated: currentLang === 'zh' ? '💎 合金鍍銀' : '💎 Silver-Plated',
+          alloy: currentLang === 'zh' ? '⚡ 合金' : '⚡ Alloy',
+          titanium: currentLang === 'zh' ? '🛡️ 鈦鋼' : '🛡️ Titanium Steel'
+        };
+        let catText = catMap[product.cat.split(' ')[0]] || product.cat;
+        if (product.subcat && subcatMap[product.subcat]) {
+          catText += ` · ${subcatMap[product.subcat]}`;
+        }
+        catEl.textContent = catText;
+      }
+
+      // Product Description
+      const descEl = document.getElementById('qvDesc');
+      if (descEl) {
+        const descStr = (product.desc && (product.desc[currentLang] || product.desc.zh)) 
+          ? (product.desc[currentLang] || (currentLang === 'en' ? autoTranslateZhToEn(product.desc.zh) : product.desc.zh)) 
+          : I18N[currentLang].qv_desc;
+        descEl.textContent = descStr;
+      }
+
+      // Product Tags
+      const tagsContainer = document.getElementById('qvTagsContainer');
+      if (tagsContainer) {
+        const tags = (product.tags && product.tags[currentLang] && product.tags[currentLang].length > 0)
+          ? product.tags[currentLang]
+          : ((product.tags && product.tags.zh) ? product.tags.zh.map(t => currentLang === 'en' ? autoTranslateZhToEn(t) : t) : []);
+        tagsContainer.innerHTML = tags.map(t => `<span class="tag-pill">${t}</span>`).join('');
+      }
+
+      const variantBox = document.getElementById('qvVariantBox');
+      const variantPills = document.getElementById('qvVariantPills');
+      const thumbsContainer = document.getElementById('qvThumbsContainer');
+      selectedVariant = null;
+
+      // Color Variants Selector
+      if (product.variants && product.variants.length > 0) {
+        variantBox.style.display = 'block';
+        selectedVariant = product.variants[0].name[currentLang] || product.variants[0].name.zh;
+
+        variantPills.innerHTML = product.variants.map((v, idx) => {
+          const vName = v.name[currentLang] || v.name.zh;
+          return `
+            <button class="variant-pill ${idx === 0 ? 'active' : ''}" onclick="selectVariant(this, '${v.img}', '${vName}')">
+              ${vName}
+            </button>
+          `;
+        }).join('');
+      } else {
+        variantBox.style.display = 'none';
+      }
+
+      // Gallery Thumbnails
+      if (product.gallery && product.gallery.length > 0) {
+        thumbsContainer.innerHTML = product.gallery.map((gImg, idx) => `
+          <img src="${gImg}" class="qv-thumb ${idx === 0 ? 'active' : ''}" onclick="switchQvMainImage(this, '${gImg}')">
+        `).join('');
+      } else {
+        thumbsContainer.innerHTML = '';
+      }
+
+      qvAddToCartBtn.onclick = () => {
+        addToCart(productId, selectedVariant);
+        closeQuickView();
+      };
+
+      backdrop.classList.add('active');
+      quickViewModal.classList.add('active');
+    }
+
+    function selectVariant(btnEl, imgSrc, variantName) {
+      document.querySelectorAll('.variant-pill').forEach(b => b.classList.remove('active'));
+      btnEl.classList.add('active');
+      qvImg.src = imgSrc;
+      selectedVariant = variantName;
+    }
+
+    function switchQvMainImage(thumbEl, imgSrc) {
+      document.querySelectorAll('.qv-thumb').forEach(t => t.classList.remove('active'));
+      thumbEl.classList.add('active');
+      qvImg.src = imgSrc;
+    }
+
+    function closeQuickView() {
+      quickViewModal.classList.remove('active');
+      if (!cartDrawer.classList.contains('active') && !searchModal.classList.contains('active') && !adminModal.classList.contains('active') && !imgZoomModal.classList.contains('active')) {
+        backdrop.classList.remove('active');
+      }
+    }
+
+    btnCloseQV.addEventListener('click', closeQuickView);
+
+    // Search Controls
+    btnOpenSearch.addEventListener('click', () => {
+      searchModal.classList.add('active');
+      searchInput.focus();
+    });
+
+    function closeSearch() {
+      searchModal.classList.remove('active');
+      searchInput.value = '';
+      filterProducts('');
+    }
+
+    btnCloseSearch.addEventListener('click', closeSearch);
+
+    searchInput.addEventListener('input', (e) => {
+      filterProducts(e.target.value.toLowerCase().trim());
+    });
+
+    function filterProducts(query) {
+      document.querySelectorAll('.product-card').forEach(card => {
+        const id = card.dataset.id;
+        const p = PRODUCTS[id];
+        if (!p) return;
+        const titleZh = (p.title.zh || '').toLowerCase();
+        const titleEn = (p.title.en || '').toLowerCase();
+
+        if (titleZh.includes(query) || titleEn.includes(query)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Backdrop Click Closes Overlays
+    backdrop.addEventListener('click', () => {
+      closeCart();
+      closeQuickView();
+      closeSearch();
+      closeAdmin();
+      closeImageZoom();
+    });
+
+    // Initialize Default Language (Traditional Chinese) & Render Catalog
+    applyLanguage('zh');
+  </script>
+</body>
+</html>
