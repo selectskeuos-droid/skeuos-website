@@ -1199,11 +1199,66 @@
       font-size: 14px;
     }
 
-    .cart-item {
+    /* Cart Item Swipe Left to Delete */
+    .cart-item-wrapper {
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      background: #ef4444;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      user-select: none;
+    }
+
+    .cart-item-content {
       display: flex;
-      gap: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid #f0f0f0;
+      gap: 14px;
+      padding: 12px;
+      background: var(--color-white);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      z-index: 2;
+      touch-action: pan-y;
+      border: 1px solid #f1f5f9;
+      border-radius: 10px;
+    }
+
+    .cart-item-wrapper.swiped .cart-item-content {
+      transform: translateX(-80px);
+    }
+
+    .cart-swipe-delete-btn {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 80px;
+      height: 100%;
+      background: #ef4444;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      cursor: pointer;
+      z-index: 1;
+      transition: background 0.2s ease;
+    }
+
+    .cart-swipe-delete-btn:hover {
+      background: #dc2626;
+    }
+
+    .swipe-hint-tag {
+      font-size: 10px;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-top: 4px;
     }
 
     .cart-item-img {
@@ -2720,14 +2775,19 @@
 
     // 3-in-1 Secret Admin Entrance Trigger Controller
     function checkAndRevealAdminEntrance() {
-      const urlParams = new URLSearchParams(window.location.search);
-      const isUrlSecret = urlParams.has('admin') || urlParams.has('skeuos') || window.location.hash === '#admin';
+      const search = (window.location.search || '').toLowerCase();
+      const hash = (window.location.hash || '').toLowerCase();
+
+      const isUrlSecret = search.includes('admin') || search.includes('skeuos') || search.includes('secret') || hash.includes('admin') || hash.includes('skeuos');
       const isDeviceAuth = localStorage.getItem('skeuos_admin_device_authorized') === 'true';
 
       if (isUrlSecret || isDeviceAuth) {
         revealAdminButton();
         if (isUrlSecret && !isAdminAuthed) {
-          openAdminAuth();
+          setTimeout(() => {
+            openAdminAuth();
+            showToast(currentLang === 'zh' ? '🔑 密網址觸發：喚醒管理員登入視窗！' : '🔑 Secret URL triggered Admin Login!');
+          }, 300);
         }
       } else {
         btnOpenAdmin.style.display = 'none';
@@ -3427,6 +3487,16 @@
       renderCart();
     }
 
+    function removeFromCart(cartKey) {
+      const existingIndex = cart.findIndex(item => item.key === cartKey);
+      if (existingIndex > -1) {
+        const titleStr = cart[existingIndex].titleStr;
+        cart.splice(existingIndex, 1);
+        renderCart();
+        showToast(currentLang === 'zh' ? `已從購物車刪除「${titleStr}」` : `Removed "${titleStr}" from cart`);
+      }
+    }
+
     function renderCart() {
       const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
       const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
@@ -3439,20 +3509,80 @@
         return;
       }
 
-      cartBody.innerHTML = cart.map(item => `
-        <div class="cart-item">
-          <img src="${item.img}" alt="${item.titleStr}" class="cart-item-img">
-          <div class="cart-item-info">
-            <div class="cart-item-name">${item.titleStr}</div>
-            <div class="cart-item-price">${formatPrice(item.price, currentLang)}</div>
-            <div class="qty-controls">
-              <button class="qty-btn" onclick="updateQty('${item.key}', -1)">-</button>
-              <span class="qty-val">${item.qty}</span>
-              <button class="qty-btn" onclick="updateQty('${item.key}', 1)">+</button>
+      cartBody.innerHTML = `
+        <div style="font-size:11px; color:#94a3b8; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between;">
+          <span>💡 提示：項目向左滑動可顯現刪除鍵</span>
+          <span>共 ${totalQty} 件</span>
+        </div>
+      ` + cart.map(item => `
+        <div class="cart-item-wrapper" data-key="${item.key}">
+          <div class="cart-item-content">
+            <img src="${item.img}" alt="${item.titleStr}" class="cart-item-img">
+            <div class="cart-item-info">
+              <div class="cart-item-name">${item.titleStr}</div>
+              <div class="cart-item-price">${formatPrice(item.price, currentLang)}</div>
+              <div class="qty-controls">
+                <button class="qty-btn" onclick="event.stopPropagation(); updateQty('${item.key}', -1);">-</button>
+                <span class="qty-val">${item.qty}</span>
+                <button class="qty-btn" onclick="event.stopPropagation(); updateQty('${item.key}', 1);">+</button>
+              </div>
             </div>
+            <div class="swipe-hint-tag">◀ 左滑刪除</div>
           </div>
+          <button class="cart-swipe-delete-btn" onclick="removeFromCart('${item.key}')">
+            <span style="font-size:16px;">🗑️</span>
+            <span>刪除</span>
+          </button>
         </div>
       `).join('');
+
+      attachCartSwipeListeners();
+    }
+
+    function attachCartSwipeListeners() {
+      document.querySelectorAll('.cart-item-wrapper').forEach(wrapper => {
+        const content = wrapper.querySelector('.cart-item-content');
+        if (!content) return;
+
+        let startX = 0;
+        let isSwiping = false;
+
+        // Touch Handlers for Mobile
+        content.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          isSwiping = true;
+        }, { passive: true });
+
+        content.addEventListener('touchmove', (e) => {
+          if (!isSwiping) return;
+          const diffX = e.touches[0].clientX - startX;
+          if (diffX < -25) {
+            wrapper.classList.add('swiped');
+          } else if (diffX > 25) {
+            wrapper.classList.remove('swiped');
+          }
+        }, { passive: true });
+
+        content.addEventListener('touchend', () => { isSwiping = false; });
+
+        // Mouse Drag Handlers for Desktop
+        content.addEventListener('mousedown', (e) => {
+          startX = e.clientX;
+          isSwiping = true;
+        });
+
+        window.addEventListener('mousemove', (e) => {
+          if (!isSwiping) return;
+          const diffX = e.clientX - startX;
+          if (diffX < -30) {
+            wrapper.classList.add('swiped');
+          } else if (diffX > 30) {
+            wrapper.classList.remove('swiped');
+          }
+        });
+
+        window.addEventListener('mouseup', () => { isSwiping = false; });
+      });
     }
 
     // Quick View Controls (Support Image Zoom, Color Variants & Full Description)
