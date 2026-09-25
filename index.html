@@ -1787,8 +1787,8 @@
       </div>
 
       <div class="nav-right">
-        <!-- Merchant Admin Entrance Button -->
-        <button class="btn-admin-panel" id="btnOpenAdmin" title="商家庫存與商品管理系統">
+        <!-- Merchant Admin Entrance Button (Hidden by default, unlocked via 3 secret methods) -->
+        <button class="btn-admin-panel" id="btnOpenAdmin" title="商家庫存與商品管理系統" style="display:none;">
           ⚙️ <span data-i18n="admin_btn">庫存管理</span>
         </button>
 
@@ -2101,7 +2101,9 @@
         <span style="font-size:20px;">⚙️</span>
         <h3 class="admin-title">SKEUOS 商家庫存與商品管理系統</h3>
       </div>
-      <div style="display:flex; align-items:center; gap:12px;">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="btn-backup" style="padding:6px 12px; font-size:12px; color:#0284c7; border-color:#93c5fd; background:#f0f9ff;" onclick="changeAdminPasswordPrompt()">🔑 修改帳密</button>
+        <button class="btn-backup" style="padding:6px 12px; font-size:12px; color:#475569; border-color:#cbd5e1; background:#f8fafc;" onclick="hideAdminButtonDevice()">🙈 隱藏入口</button>
         <button class="btn-backup" style="padding:6px 12px; font-size:12px; color:#ef4444; border-color:#fca5a5;" onclick="handleAdminLogout()">🔒 登出後台</button>
         <button class="close-btn" id="btnCloseAdmin">&times;</button>
       </div>
@@ -2665,13 +2667,20 @@
       passInput.type = (passInput.type === 'password') ? 'text' : 'password';
     }
 
+    function getAdminCredentials() {
+      const u = localStorage.getItem('skeuos_admin_user') || 'admin';
+      const p = localStorage.getItem('skeuos_admin_pass') || 'skeuos2026';
+      return { user: u, pass: p };
+    }
+
     function handleAdminLogin(e) {
       e.preventDefault();
       const u = document.getElementById('authUsername').value.trim();
       const p = document.getElementById('authPassword').value.trim();
       const remember = document.getElementById('authRemember').checked;
+      const creds = getAdminCredentials();
 
-      if (u === 'admin' && p === 'skeuos2026') {
+      if (u === creds.user && p === creds.pass) {
         isAdminAuthed = true;
         if (remember) {
           localStorage.setItem('skeuos_admin_authed', 'true');
@@ -2686,6 +2695,19 @@
       }
     }
 
+    function changeAdminPasswordPrompt() {
+      const creds = getAdminCredentials();
+      const newUser = prompt(currentLang === 'zh' ? '請輸入新的管理員帳號：' : 'Enter new admin username:', creds.user);
+      if (!newUser || !newUser.trim()) return;
+
+      const newPass = prompt(currentLang === 'zh' ? '請輸入新的管理員密碼：' : 'Enter new admin password:', creds.pass);
+      if (!newPass || !newPass.trim()) return;
+
+      localStorage.setItem('skeuos_admin_user', newUser.trim());
+      localStorage.setItem('skeuos_admin_pass', newPass.trim());
+      showToast(currentLang === 'zh' ? '🔑 已成功變更管理員帳號與密碼！' : '🔑 Admin credentials updated!');
+    }
+
     function handleAdminLogout() {
       isAdminAuthed = false;
       sessionStorage.removeItem('skeuos_admin_authed');
@@ -2695,6 +2717,89 @@
     }
 
     document.getElementById('btnCloseAuth').addEventListener('click', closeAdminAuth);
+
+    // 3-in-1 Secret Admin Entrance Trigger Controller
+    function checkAndRevealAdminEntrance() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isUrlSecret = urlParams.has('admin') || urlParams.has('skeuos') || window.location.hash === '#admin';
+      const isDeviceAuth = localStorage.getItem('skeuos_admin_device_authorized') === 'true';
+
+      if (isUrlSecret || isDeviceAuth) {
+        revealAdminButton();
+        if (isUrlSecret && !isAdminAuthed) {
+          openAdminAuth();
+        }
+      } else {
+        btnOpenAdmin.style.display = 'none';
+      }
+    }
+
+    function revealAdminButton() {
+      btnOpenAdmin.style.display = 'inline-flex';
+      localStorage.setItem('skeuos_admin_device_authorized', 'true');
+    }
+
+    function hideAdminButtonDevice() {
+      localStorage.removeItem('skeuos_admin_device_authorized');
+      btnOpenAdmin.style.display = 'none';
+      handleAdminLogout();
+      showToast(currentLang === 'zh' ? '🙈 已在此設備隱藏管理員入口' : '🙈 Admin entrance hidden on this device');
+    }
+
+    // Trigger Method 2A: Keyboard Hotkey (Ctrl + Shift + A)
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) || (e.altKey && (e.key === 'A' || e.key === 'a'))) {
+        e.preventDefault();
+        revealAdminButton();
+        if (isAdminAuthed) {
+          openAdminModalDirect();
+        } else {
+          openAdminAuth();
+        }
+        showToast(currentLang === 'zh' ? '🔑 快捷鍵觸發：開啟商家管理後台' : '🔑 Hotkey triggered Admin Panel');
+      }
+    });
+
+    // Trigger Method 2B: Mobile Logo Long Press (2.2 seconds)
+    const logoEl = document.querySelector('.logo-container');
+    let logoPressTimer = null;
+
+    if (logoEl) {
+      const startPress = () => {
+        logoPressTimer = setTimeout(() => {
+          revealAdminButton();
+          if (isAdminAuthed) openAdminModalDirect(); else openAdminAuth();
+          showToast(currentLang === 'zh' ? '🔓 密技觸發：長按 Logo 開啟管理員後台！' : '🔓 Logo long-press Admin unlocked!');
+        }, 2200);
+      };
+      const cancelPress = () => { if (logoPressTimer) clearTimeout(logoPressTimer); };
+
+      logoEl.addEventListener('mousedown', startPress);
+      logoEl.addEventListener('mouseup', cancelPress);
+      logoEl.addEventListener('mouseleave', cancelPress);
+      logoEl.addEventListener('touchstart', startPress, { passive: true });
+      logoEl.addEventListener('touchend', cancelPress);
+    }
+
+    // Trigger Method 2C: Footer Copyright 5 Fast Clicks
+    const footerEl = document.querySelector('footer');
+    let footerClickCount = 0;
+    let footerClickTimer = null;
+
+    if (footerEl) {
+      footerEl.addEventListener('click', () => {
+        footerClickCount++;
+        if (footerClickTimer) clearTimeout(footerClickTimer);
+        footerClickTimer = setTimeout(() => { footerClickCount = 0; }, 1800);
+
+        if (footerClickCount >= 5) {
+          footerClickCount = 0;
+          revealAdminButton();
+          if (isAdminAuthed) openAdminModalDirect(); else openAdminAuth();
+          showToast(currentLang === 'zh' ? '⚡ 密技觸發：連續點擊版權區喚醒管理員後台！' : '⚡ 5 Clicks Admin Unlocked!');
+        }
+      });
+    }
 
     // Admin Modal Controls with Authentication Guard
     btnOpenAdmin.addEventListener('click', () => {
@@ -2711,6 +2816,9 @@
       renderAdminInventoryTable();
       renderAdminMultiGallery();
     }
+
+    // Check & Reveal Admin Entrance on Page Init
+    checkAndRevealAdminEntrance();
 
     function closeAdmin() {
       adminModal.classList.remove('active');
